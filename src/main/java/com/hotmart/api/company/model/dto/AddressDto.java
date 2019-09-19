@@ -1,12 +1,12 @@
 package com.hotmart.api.company.model.dto;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
 public class AddressDto {
 
     private String country;
