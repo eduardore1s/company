@@ -1,7 +1,7 @@
 package com.hotmart.api.company.model.entity;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -13,8 +13,8 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@Builder
 @Entity
+@NoArgsConstructor
 public class Budget {
 
     @Id

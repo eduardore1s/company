@@ -9,6 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AddressDto {
 
+    private Long id;
+
     private String country;
 
     private String state;
