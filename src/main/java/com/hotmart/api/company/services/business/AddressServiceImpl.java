@@ -24,10 +24,10 @@ public class AddressServiceImpl implements AddressService{
     public List<AddressDto> findAll() {
 
         final List<Address> addressList = addressDataService.findAll();
-        if (addressList.isEmpty()){
-            return null;
+        if (!addressList.isEmpty()){
+            return addressList.stream().map(addressMapper::toAddressDto).collect(Collectors.toList());
         }
-        return addressList.stream().map(addressMapper::toAddressDto).collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -40,28 +40,28 @@ public class AddressServiceImpl implements AddressService{
     public AddressDto update(Long id, AddressDto addressDto) {
         final Optional<Address> addressOptional = addressDataService.findById(id);
 
-        if (!addressOptional.isPresent()){
-            return null;
+        if (addressOptional.isPresent()){
+            final Address address = addressMapper.toAddress(addressDto);
+            address.setId(addressOptional.get().getId());
+            addressDataService.create(address);
+
+            addressDto.setId(addressOptional.get().getId());
+            return addressDto;
         }
 
-        final Address address = addressMapper.toAddress(addressDto);
-        address.setId(addressOptional.get().getId());
-        addressDataService.update(address);
-
-        addressDto.setId(addressOptional.get().getId());
-        return addressDto;
+        return null;
     }
 
     @Override
     public boolean delete(Long id) {
         final Optional<Address> addressOptional = addressDataService.findById(id);
 
-        if (!addressOptional.isPresent()){
-            return false;
+        if (addressOptional.isPresent()){
+            addressDataService.delete(addressOptional.get());
+            return true;
         }
 
-        addressDataService.delete(addressOptional.get());
-        return true;
+        return false;
     }
 
     @Override
@@ -69,11 +69,11 @@ public class AddressServiceImpl implements AddressService{
 
         final Optional<Address> address = addressDataService.findById(id);
 
-        if (!address.isPresent()){
-            return null;
+        if (address.isPresent()){
+            return addressMapper.toAddressDto(address.get());
         }
 
-        return addressMapper.toAddressDto(address.get());
+        return null;
     }
 
 

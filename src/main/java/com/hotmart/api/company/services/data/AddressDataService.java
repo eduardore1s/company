@@ -9,7 +9,6 @@ public interface AddressDataService {
 
     List<Address> findAll();
     Address create(Address address);
-    Address update(Address address);
     void delete(Address address);
     Optional<Address> findById(Long id);
 

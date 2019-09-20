@@ -24,10 +24,10 @@ public class AddressController {
 
         final List<AddressDto> addressDtoList = addressService.findAll();
 
-        if (addressDtoList == null) {
-            return ResponseEntity.noContent().build();
+        if (addressDtoList != null) {
+            return ResponseEntity.ok(addressDtoList);
         }
-        return ResponseEntity.ok(addressDtoList);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping
@@ -46,10 +46,10 @@ public class AddressController {
 
         final AddressDto addressDtoResponse = addressService.findById(id);
 
-        if (addressDtoResponse == null) {
-            return ResponseEntity.notFound().build();
+        if (addressDtoResponse != null) {
+            return ResponseEntity.ok(addressDtoResponse);
         }
-        return ResponseEntity.ok(addressDtoResponse);
+        return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
@@ -57,19 +57,19 @@ public class AddressController {
 
         final AddressDto addressDtoResponse = addressService.update(id, addressDto);
 
-        if (addressDtoResponse == null){
-            return ResponseEntity.notFound().build();
+        if (addressDtoResponse != null){
+            return new ResponseEntity<>(addressDtoResponse, HttpStatus.CREATED);
         }
 
-        return new ResponseEntity<>(addressDtoResponse, HttpStatus.CREATED);
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<AddressDto> deleteAddress(@PathVariable Long id){
 
-        if (!addressService.delete(id)) {
-            return ResponseEntity.notFound().build();
+        if (addressService.delete(id)) {
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 }

@@ -25,11 +25,6 @@ public class AddressDataServiceImpl implements AddressDataService {
     }
 
     @Override
-    public Address update(Address address) {
-        return addressRepository.save(address);
-    }
-
-    @Override
     public void delete(Address address) {
         addressRepository.delete(address);
     }
