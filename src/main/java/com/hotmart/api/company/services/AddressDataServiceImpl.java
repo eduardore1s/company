@@ -65,8 +65,15 @@ public class AddressDataServiceImpl implements AddressDataService {
     }
 
     @Override
-    public Optional<Address> findById(Long id) {
-        return addressRepository.findById(id);
+    public AddressDto findById(Long id) {
+
+        final Optional<Address> address = addressRepository.findById(id);
+
+        if (!address.isPresent()){
+            return null;
+        }
+
+        return addressMapper.toAddressDto(address.get());
     }
 
 }
