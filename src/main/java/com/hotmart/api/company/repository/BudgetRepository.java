@@ -1,7 +1,7 @@
 package com.hotmart.api.company.repository;
 
-import com.hotmart.api.company.model.entity.Address;
+import com.hotmart.api.company.model.entity.Budget;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BudgetRepository extends JpaRepository<Address, Long> {
+public interface BudgetRepository extends JpaRepository<Budget, Long> {
 }

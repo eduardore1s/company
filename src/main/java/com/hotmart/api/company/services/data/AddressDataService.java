@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface AddressDataService {
 
     List<Address> findAll();
-    Address create(Address address);
+    Address save(Address address);
     void delete(Address address);
     Optional<Address> findById(Long id);
 

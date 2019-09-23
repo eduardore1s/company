@@ -1,28 +1,24 @@
-package com.hotmart.api.company.model.entity;
+package com.hotmart.api.company.model.dto.response;
 
+import com.hotmart.api.company.model.entity.Department;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
-public class Project {
+public class ProjectDtoResponse {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToOne
-    private Department department;
+    private DepartmentDtoResponse department;
 
     private BigDecimal value;
 
@@ -30,7 +26,5 @@ public class Project {
 
     private LocalDate dateFinal;
 
-    @ManyToMany
-    private List<Employee> employeeList;
-
+    private List<EmployeeDtoResponse> employeeList;
 }

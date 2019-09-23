@@ -4,5 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum EmployeeGender {
-    MASCULINO, FEMININO;
+    MALE, FEMALE;
 }

@@ -1,36 +1,34 @@
-package com.hotmart.api.company.model.entity;
+package com.hotmart.api.company.model.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
-public class Project {
+public class ProjectDtoRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @NotNull
     private String name;
 
-    @OneToOne
-    private Department department;
+    @NotNull
+    private Long idDepartment;
 
+    @NotNull
     private BigDecimal value;
 
+    @NotNull
     private LocalDate dateStart;
 
+    @NotNull
     private LocalDate dateFinal;
 
-    @ManyToMany
-    private List<Employee> employeeList;
-
+    @NotNull
+    private List<Long> idEmployees;
 }

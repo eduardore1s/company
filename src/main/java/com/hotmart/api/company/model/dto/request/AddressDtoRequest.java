@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto;
+package com.hotmart.api.company.model.dto.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddressDto {
-
-    private Long id;
+public class AddressDtoRequest {
 
     @NotNull
     private String country;
@@ -27,4 +25,5 @@ public class AddressDto {
 
     @NotNull
     private String zipCode;
+
 }

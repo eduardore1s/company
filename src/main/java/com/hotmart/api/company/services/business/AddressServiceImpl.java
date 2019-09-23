@@ -1,6 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.dto.AddressDto;
+import com.hotmart.api.company.model.dto.request.AddressDtoRequest;
+import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.services.data.AddressDataService;
@@ -21,32 +22,31 @@ public class AddressServiceImpl implements AddressService{
     private AddressDataService addressDataService;
 
     @Override
-    public List<AddressDto> findAll() {
+    public List<AddressDtoResponse> findAll() {
 
         final List<Address> addressList = addressDataService.findAll();
         if (!addressList.isEmpty()){
-            return addressList.stream().map(addressMapper::toAddressDto).collect(Collectors.toList());
+            return addressList.stream().map(addressMapper::toAddressDtoResponse).collect(Collectors.toList());
         }
         return null;
     }
 
     @Override
-    public AddressDto create(AddressDto addressDto) {
-        final Address address = addressDataService.create(addressMapper.toAddress(addressDto));
-        return addressMapper.toAddressDto(address);
+    public AddressDtoResponse create(AddressDtoRequest addressDtoRequest) {
+        final Address address = addressDataService.save(addressMapper.toAddress(addressDtoRequest));
+        return addressMapper.toAddressDtoResponse(address);
     }
 
     @Override
-    public AddressDto update(Long id, AddressDto addressDto) {
+    public AddressDtoResponse update(Long id, AddressDtoRequest addressDtoRequest) {
         final Optional<Address> addressOptional = addressDataService.findById(id);
 
         if (addressOptional.isPresent()){
-            final Address address = addressMapper.toAddress(addressDto);
-            address.setId(addressOptional.get().getId());
-            addressDataService.create(address);
+            final Address address = addressOptional.get();
+            addressMapper.updateAddress(addressDtoRequest, address);
+            addressDataService.save(address);
 
-            addressDto.setId(addressOptional.get().getId());
-            return addressDto;
+            return addressMapper.toAddressDtoResponse(address);
         }
 
         return null;
@@ -65,12 +65,12 @@ public class AddressServiceImpl implements AddressService{
     }
 
     @Override
-    public AddressDto findById(Long id) {
+    public AddressDtoResponse findById(Long id) {
 
         final Optional<Address> address = addressDataService.findById(id);
 
         if (address.isPresent()){
-            return addressMapper.toAddressDto(address.get());
+            return addressMapper.toAddressDtoResponse(address.get());
         }
 
         return null;
