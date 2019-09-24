@@ -39,4 +39,8 @@ public class Employee {
     @ManyToMany
     private List<Project> projectList;
 
+    public void teste(){
+        this.dateOfBirth = LocalDate.parse("");
+    }
+
 }

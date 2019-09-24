@@ -37,9 +37,11 @@ public class EmployeeController {
 
         final EmployeeDtoResponse employeeDtoResponse = employeeService.create(employeeDtoRequest);
 
-        final URI uri = uriBuilder.path("api/v1/employee/{id}").buildAndExpand(employeeDtoResponse.getId()).toUri();
-        return ResponseEntity.created(uri).body(employeeDtoResponse);
-//        return new ResponseEntity<>(employeeDtoResponse, HttpStatus.CREATED);
+        if (employeeDtoResponse != null){
+            final URI uri = uriBuilder.path("api/v1/employee/{id}").buildAndExpand(employeeDtoResponse.getId()).toUri();
+            return ResponseEntity.created(uri).body(employeeDtoResponse);
+        }
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @GetMapping("/{id}")

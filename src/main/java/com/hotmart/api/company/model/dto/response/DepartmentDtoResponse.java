@@ -1,6 +1,5 @@
 package com.hotmart.api.company.model.dto.response;
 
-import com.hotmart.api.company.model.entity.Budget;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,5 +17,5 @@ public class DepartmentDtoResponse {
 
     private Integer number;
 
-    private List<Budget> budget;
+    private List<BudgetDtoResponse> budgets;
 }

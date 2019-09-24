@@ -29,6 +29,5 @@ public class ProjectDtoRequest {
     @NotNull
     private LocalDate dateFinal;
 
-    @NotNull
     private List<Long> idEmployees;
 }

@@ -9,9 +9,6 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface EmployeeMapper {
 
-//    @Mappings({
-//            @Mapping(source = "idAddress", target = "address")
-//    })
     Employee toEmployee(EmployeeDtoRequest employeeDtoRequest);
 
     EmployeeDtoResponse toEmployeeDtoResponse(Employee employee);

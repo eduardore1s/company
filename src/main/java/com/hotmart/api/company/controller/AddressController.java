@@ -37,9 +37,11 @@ public class AddressController {
 
         final AddressDtoResponse addressDtoResponse = addressService.create(addressDtoRequest);
 
-        final URI uri = uriBuilder.path("api/v1/address/{id}").buildAndExpand(addressDtoResponse.getId()).toUri();
-        return ResponseEntity.created(uri).body(addressDtoResponse);
-//        return new ResponseEntity<>(addressDtoResponse, HttpStatus.CREATED);
+        if (addressDtoResponse != null){
+            final URI uri = uriBuilder.path("api/v1/address/{id}").buildAndExpand(addressDtoResponse.getId()).toUri();
+            return ResponseEntity.created(uri).body(addressDtoResponse);
+        }
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @GetMapping("/{id}")
