@@ -12,6 +12,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class BudgetDtoResponse {
 
+    private Long id;
+
     private BigDecimal value;
 
     private LocalDate dateStart;

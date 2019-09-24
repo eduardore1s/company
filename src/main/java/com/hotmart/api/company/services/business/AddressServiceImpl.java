@@ -5,7 +5,7 @@ import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.services.data.AddressDataService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +13,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService{
 
-    @Autowired
-    private AddressMapper addressMapper;
+    private final AddressMapper addressMapper;
 
-    @Autowired
-    private AddressDataService addressDataService;
+    private final AddressDataService addressDataService;
 
     @Override
     public List<AddressDtoResponse> findAll() {

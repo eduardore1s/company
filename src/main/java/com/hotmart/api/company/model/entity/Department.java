@@ -22,6 +22,6 @@ public class Department {
     private Integer number;
 
     @OneToMany
-    private List<Budget> budget;
+    private List<Budget> budgets;
 
 }

@@ -5,7 +5,7 @@ import com.hotmart.api.company.model.dto.response.DepartmentDtoResponse;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.services.data.DepartmentDataService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +13,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class DepartmentServiceImpl implements DepartmentService {
 
-    @Autowired
-    private DepartmentMapper departmentMapper;
+    private final DepartmentMapper departmentMapper;
 
-    @Autowired
-    private DepartmentDataService departmentDataService;
+    private final DepartmentDataService departmentDataService;
 
     @Override
     public List<DepartmentDtoResponse> findAll() {

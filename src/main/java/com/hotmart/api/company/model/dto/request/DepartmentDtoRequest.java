@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Getter
 @Setter
@@ -18,5 +17,5 @@ public class DepartmentDtoRequest {
     @NotNull
     private Integer number;
 
-    private List<Long> idBudgets;
+//    private List<Long> idBudgets;
 }
