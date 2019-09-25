@@ -7,7 +7,7 @@ import com.hotmart.api.company.model.entity.Project;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
 import com.hotmart.api.company.services.data.DepartmentDataService;
 import com.hotmart.api.company.services.data.ProjectDataService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +15,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService{
 
-    @Autowired
-    private ProjectMapper projectMapper;
+    private final ProjectMapper projectMapper;
 
-    @Autowired
-    private ProjectDataService projectDataService;
+    private final ProjectDataService projectDataService;
 
-    @Autowired
-    private DepartmentDataService departmentDataService;
+    private final DepartmentDataService departmentDataService;
 
     @Override
     public List<ProjectDtoResponse> findAll() {
@@ -39,35 +37,26 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public ProjectDtoResponse create(ProjectDtoRequest projectDtoRequest) {
 
-        Project projectResponse = null;
+        final Project project = projectMapper.toProject(projectDtoRequest);
 
-        final Optional<Department> departmentProject = departmentDataService.findById(projectDtoRequest.getIdDepartment());
+        setDepartmentProject(projectDtoRequest, project);
 
-        if (departmentProject.isPresent()){
-            final Project project = projectMapper.toProject(projectDtoRequest);
-            project.setDepartment(departmentProject.get());
-
-            projectResponse = projectDataService.save(project);
-        }
-
-        return projectMapper.toProjectDtoResponse(projectResponse);
+        return projectMapper.toProjectDtoResponse(projectDataService.save(project));
     }
 
     @Override
     public ProjectDtoResponse update(Long id, ProjectDtoRequest projectDtoRequest) {
 
         final Optional<Project> projectOptional = projectDataService.findById(id);
-        final Optional<Department> departmentProject = departmentDataService.findById(projectDtoRequest.getIdDepartment());
 
-        if (projectOptional.isPresent() && departmentProject.isPresent()) {
+        if (projectOptional.isPresent()) {
 
             final Project project = projectOptional.get();
             projectMapper.updateProject(projectDtoRequest, project);
-            project.setDepartment(departmentProject.get());
 
-            projectDataService.save(project);
+            setDepartmentProject(projectDtoRequest, project);
 
-            return projectMapper.toProjectDtoResponse(project);
+            return projectMapper.toProjectDtoResponse(projectDataService.save(project));
         }
         return null;
     }
@@ -95,4 +84,15 @@ public class ProjectServiceImpl implements ProjectService{
 
         return null;
     }
+
+    private void setDepartmentProject(ProjectDtoRequest projectDtoRequest, Project project) {
+        if (projectDtoRequest.getIdDepartment() != null){
+            final Optional<Department> departmentProject = departmentDataService.findById(projectDtoRequest.getIdDepartment());
+
+            if (departmentProject.isPresent()){
+                project.setDepartment(departmentProject.get());
+            }
+        }
+    }
+
 }

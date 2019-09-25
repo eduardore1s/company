@@ -51,6 +51,7 @@ public class AddressServiceImplTest {
         Assert.assertEquals(addressList.get(0).getCountry(), addressListDtoResponse.get(0).getCountry());
         Assert.assertEquals(addressList.get(0).getState(), addressListDtoResponse.get(0).getState());
         Assert.assertEquals(addressList.get(0).getZipCode(), addressListDtoResponse.get(0).getZipCode());
+
         Assert.assertEquals(addressList.get(1).getStreet(), addressListDtoResponse.get(1).getStreet());
         Assert.assertEquals(addressList.get(2).getStreet(), addressListDtoResponse.get(2).getStreet());
     }

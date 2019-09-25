@@ -49,6 +49,9 @@ public class DepartmentServiceImplTest {
         Assert.assertEquals(departmentList.get(0).getName(), departmentListDtoResponse.get(0).getName());
         Assert.assertEquals(departmentList.get(0).getNumber(), departmentListDtoResponse.get(0).getNumber());
         Assert.assertEquals(departmentList.get(0).getBudgets().get(0).getValue(), departmentListDtoResponse.get(0).getBudgets().get(0).getValue());
+
+        Assert.assertEquals(departmentList.get(1).getName(), departmentListDtoResponse.get(1).getName());
+        Assert.assertEquals(departmentList.get(2).getName(), departmentListDtoResponse.get(2).getName());
     }
 
     @Test

@@ -7,7 +7,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
 @Setter
@@ -34,5 +33,5 @@ public class EmployeeDtoRequest {
     @NotNull
     private BigDecimal salary;
 
-    private List<Long> idProjects;
+//    private List<Long> idProjects; TODO
 }

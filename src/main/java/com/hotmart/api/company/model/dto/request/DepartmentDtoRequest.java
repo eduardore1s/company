@@ -17,5 +17,5 @@ public class DepartmentDtoRequest {
     @NotNull
     private Integer number;
 
-//    private List<Long> idBudgets;
+//    private List<Long> idBudgets; TODO
 }

@@ -7,7 +7,7 @@ import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;
 import com.hotmart.api.company.services.data.AddressDataService;
 import com.hotmart.api.company.services.data.EmployeeDataService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,16 +15,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService{
 
-    @Autowired
-    private EmployeeMapper employeeMapper;
+    private final EmployeeMapper employeeMapper;
 
-    @Autowired
-    private EmployeeDataService employeeDataService;
+    private final EmployeeDataService employeeDataService;
 
-    @Autowired
-    private AddressDataService addressDataService;
+    private final AddressDataService addressDataService;
 
     @Override
     public List<EmployeeDtoResponse> findAll() {
@@ -39,39 +37,28 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     public EmployeeDtoResponse create(EmployeeDtoRequest employeeDtoRequest) {
 
-        Employee employeeResponse = null;
+        final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
 
-        final Optional<Address> addressEmployee = addressDataService.findById(employeeDtoRequest.getIdAddress());
-        final Optional<Employee> supervisorEmployee = employeeDataService.findById(employeeDtoRequest.getIdSupervisor());
+        setAddressEmployee(employeeDtoRequest, employee);
+        setSupervisorEmployee(employeeDtoRequest, employee);
 
-        if (addressEmployee.isPresent() && supervisorEmployee.isPresent()){
-            final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
-            employee.setAddress(addressEmployee.get());
-            employee.setSupervisor(supervisorEmployee.get());
-
-            employeeResponse = employeeDataService.save(employee);
-        }
-
-        return employeeMapper.toEmployeeDtoResponse(employeeResponse);
+        return employeeMapper.toEmployeeDtoResponse(employeeDataService.save(employee));
     }
 
     @Override
     public EmployeeDtoResponse update(Long id, EmployeeDtoRequest employeeDtoRequest) {
 
         final Optional<Employee> employeeOptional = employeeDataService.findById(id);
-        final Optional<Address> addressEmployee = addressDataService.findById(employeeDtoRequest.getIdAddress());
-        final Optional<Employee> supervisorEmployee = employeeDataService.findById(employeeDtoRequest.getIdSupervisor());
 
-        if (employeeOptional.isPresent() && addressEmployee.isPresent() && supervisorEmployee.isPresent()) {
+        if (employeeOptional.isPresent()) {
 
             final Employee employee = employeeOptional.get();
             employeeMapper.updateEmployee(employeeDtoRequest, employee);
-            employee.setAddress(addressEmployee.get());
-            employee.setSupervisor(supervisorEmployee.get());
 
-            employeeDataService.save(employee);
+            setAddressEmployee(employeeDtoRequest, employee);
+            setSupervisorEmployee(employeeDtoRequest, employee);
 
-            return employeeMapper.toEmployeeDtoResponse(employee);
+            return employeeMapper.toEmployeeDtoResponse(employeeDataService.save(employee));
         }
         return null;
     }
@@ -98,5 +85,26 @@ public class EmployeeServiceImpl implements EmployeeService{
         }
 
         return null;
+    }
+
+
+    private void setAddressEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
+        if (employeeDtoRequest.getIdAddress() != null){
+            final Optional<Address> addressEmployee = addressDataService.findById(employeeDtoRequest.getIdAddress());
+
+            if (addressEmployee.isPresent()){
+                employee.setAddress(addressEmployee.get());
+            }
+        }
+    }
+
+    private void setSupervisorEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
+        if (employeeDtoRequest.getIdSupervisor() != null) {
+            final Optional<Employee> supervisorEmployee = employeeDataService.findById(employeeDtoRequest.getIdSupervisor());
+
+            if (supervisorEmployee.isPresent()){
+                employee.setSupervisor(supervisorEmployee.get());
+            }
+        }
     }
 }
