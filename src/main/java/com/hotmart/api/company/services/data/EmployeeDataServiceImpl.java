@@ -43,4 +43,9 @@ public class EmployeeDataServiceImpl implements EmployeeDataService{
     public Optional<Employee> findByName(String name) {
         return employeeRepository.findByName(name);
     }
+
+    @Override
+    public List<Employee> findBySupervisorId(Long idSupervisor) {
+        return employeeRepository.findBySupervisorId(idSupervisor);
+    }
 }

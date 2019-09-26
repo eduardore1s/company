@@ -14,5 +14,6 @@ public interface EmployeeService {
     EmployeeDtoResponse findById(Long id);
     List<EmployeeDtoResponse> findByProjectListDepartmentId(Long idDepartment);
     EmployeeDtoResponse findByName(String name);
+    List<EmployeeDtoResponse> findBySupervisorId(Long idSupervisor);
 
 }

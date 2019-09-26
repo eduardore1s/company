@@ -13,4 +13,6 @@ public interface EmployeeDataService {
     Optional<Employee> findById(Long id);
     List<Employee> findByProjectListDepartmentId(Long idDepartment);
     Optional<Employee> findByName(String name);
+    List<Employee> findBySupervisorId(Long idSupervisor);
+
 }

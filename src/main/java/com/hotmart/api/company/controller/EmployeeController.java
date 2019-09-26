@@ -96,7 +96,7 @@ public class EmployeeController {
 
 
     @GetMapping("/{id}/projects")
-    public ResponseEntity<?> getAllProjectsByEmployee(@PathVariable Long id){
+    public ResponseEntity<?> getProjectsByEmployee(@PathVariable Long id){
 
         final List<ProjectDtoResponse> projectsDtoResponseList = projectService.findByEmployeeListId(id);
 

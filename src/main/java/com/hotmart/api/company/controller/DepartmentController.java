@@ -84,7 +84,7 @@ public class DepartmentController {
 
 
     @GetMapping("{idDepartment}/employees")
-    public ResponseEntity<?> getAllEmployeesOfDepartment(@PathVariable Long idDepartment){
+    public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long idDepartment){
 
         final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findByProjectListDepartmentId(idDepartment);
 
