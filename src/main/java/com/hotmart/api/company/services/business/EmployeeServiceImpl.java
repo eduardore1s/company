@@ -87,6 +87,16 @@ public class EmployeeServiceImpl implements EmployeeService{
         return null;
     }
 
+    @Override
+    public List<EmployeeDtoResponse> findByProjectListDepartmentId(Long idDepartment) {
+
+        final List<Employee>  employeeList = employeeDataService.findByProjectListDepartmentId(idDepartment);
+        if (!employeeList.isEmpty()){
+            return employeeList.stream().map(employeeMapper::toEmployeeDtoResponse).collect(Collectors.toList());
+        }
+        return null;
+    }
+
 
     private void setAddressEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
         if (employeeDtoRequest.getIdAddress() != null){

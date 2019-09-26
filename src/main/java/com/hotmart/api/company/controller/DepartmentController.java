@@ -2,7 +2,9 @@ package com.hotmart.api.company.controller;
 
 import com.hotmart.api.company.model.dto.request.DepartmentDtoRequest;
 import com.hotmart.api.company.model.dto.response.DepartmentDtoResponse;
+import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
 import com.hotmart.api.company.services.business.DepartmentService;
+import com.hotmart.api.company.services.business.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class DepartmentController {
     
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private EmployeeService employeeService;
 
     @GetMapping
     public ResponseEntity<?> getDepartments(){
@@ -75,5 +80,18 @@ public class DepartmentController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("{idDepartment}/employees")
+    public ResponseEntity<?> getAllEmployeesOfDepartment(@PathVariable Long idDepartment){
+
+        final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findByProjectListDepartmentId(idDepartment);
+
+        if (employeeDtoResponseList != null) {
+            return ResponseEntity.ok(employeeDtoResponseList);
+        }
+        return ResponseEntity.noContent().build();
+
     }
 }

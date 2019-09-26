@@ -11,4 +11,5 @@ public interface EmployeeDataService {
     Employee save(Employee employee);
     void delete(Employee employee);
     Optional<Employee> findById(Long id);
+    List<Employee> findByProjectListDepartmentId(Long idDepartment);
 }
