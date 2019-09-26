@@ -12,4 +12,5 @@ public interface ProjectService {
     ProjectDtoResponse update(Long id, ProjectDtoRequest projectDtoRequest);
     boolean delete(Long id);
     ProjectDtoResponse findById(Long id);
+    List<ProjectDtoResponse> findByEmployeeListId(Long idEmployee);
 }

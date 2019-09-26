@@ -2,7 +2,9 @@ package com.hotmart.api.company.controller;
 
 import com.hotmart.api.company.model.dto.request.EmployeeDtoRequest;
 import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
+import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
 import com.hotmart.api.company.services.business.EmployeeService;
+import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,9 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService employeeService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @GetMapping
     public ResponseEntity<?> getEmployees(){
@@ -77,4 +82,27 @@ public class EmployeeController {
         return ResponseEntity.notFound().build();
     }
 
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getEmployeeByName(@RequestParam String name){
+
+        final EmployeeDtoResponse employeeDtoResponse = employeeService.findByName(name);
+
+        if (employeeDtoResponse != null) {
+            return ResponseEntity.ok(employeeDtoResponse);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+
+    @GetMapping("/{id}/projects")
+    public ResponseEntity<?> getAllProjectsByEmployee(@PathVariable Long id){
+
+        final List<ProjectDtoResponse> projectsDtoResponseList = projectService.findByEmployeeListId(id);
+
+        if (projectsDtoResponseList != null) {
+            return ResponseEntity.ok(projectsDtoResponseList);
+        }
+        return ResponseEntity.noContent().build();
+    }
 }

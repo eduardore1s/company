@@ -18,12 +18,12 @@ import java.util.List;
 public class ProjectController {
 
     @Autowired
-    private ProjectService projectsService;
+    private ProjectService projectService;
 
     @GetMapping
     public ResponseEntity<?> getProjects(){
 
-        final List<ProjectDtoResponse> projectsDtoResponseList = projectsService.findAll();
+        final List<ProjectDtoResponse> projectsDtoResponseList = projectService.findAll();
 
         if (projectsDtoResponseList != null) {
             return ResponseEntity.ok(projectsDtoResponseList);
@@ -35,7 +35,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDtoResponse> postProject(@Valid @RequestBody ProjectDtoRequest projectsDtoRequest,
                                                                 UriComponentsBuilder uriBuilder){
 
-        final ProjectDtoResponse projectsDtoResponse = projectsService.create(projectsDtoRequest);
+        final ProjectDtoResponse projectsDtoResponse = projectService.create(projectsDtoRequest);
 
         if (projectsDtoResponse != null){
             final URI uri = uriBuilder.path("api/v1/projects/{id}").buildAndExpand(projectsDtoResponse.getId()).toUri();
@@ -47,7 +47,7 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(@PathVariable Long id){
 
-        final ProjectDtoResponse projectsDtoResponse = projectsService.findById(id);
+        final ProjectDtoResponse projectsDtoResponse = projectService.findById(id);
 
         if (projectsDtoResponse != null) {
             return ResponseEntity.ok(projectsDtoResponse);
@@ -59,7 +59,7 @@ public class ProjectController {
     public ResponseEntity<ProjectDtoResponse> putProject(@PathVariable Long id,
                                                                @Valid @RequestBody ProjectDtoRequest projectsDtoRequest){
 
-        final ProjectDtoResponse projectsDtoResponse = projectsService.update(id, projectsDtoRequest);
+        final ProjectDtoResponse projectsDtoResponse = projectService.update(id, projectsDtoRequest);
 
         if (projectsDtoResponse != null){
             return new ResponseEntity<>(projectsDtoResponse, HttpStatus.CREATED);
@@ -71,7 +71,7 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ProjectDtoResponse> deleteProject(@PathVariable Long id){
 
-        if (projectsService.delete(id)) {
+        if (projectService.delete(id)) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();

@@ -97,6 +97,18 @@ public class EmployeeServiceImpl implements EmployeeService{
         return null;
     }
 
+    @Override
+    public EmployeeDtoResponse findByName(String name) {
+
+        final Optional<Employee> employee = employeeDataService.findByName(name);
+
+        if (employee.isPresent()){
+            return employeeMapper.toEmployeeDtoResponse(employee.get());
+        }
+
+        return null;
+    }
+
 
     private void setAddressEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
         if (employeeDtoRequest.getIdAddress() != null){

@@ -85,6 +85,16 @@ public class ProjectServiceImpl implements ProjectService{
         return null;
     }
 
+    @Override
+    public List<ProjectDtoResponse> findByEmployeeListId(Long idEmployee) {
+
+        final List<Project>  projectList = projectDataService.findByEmployeeListId(idEmployee);
+        if (!projectList.isEmpty()){
+            return projectList.stream().map(projectMapper::toProjectDtoResponse).collect(Collectors.toList());
+        }
+        return null;
+    }
+
     private void setDepartmentProject(ProjectDtoRequest projectDtoRequest, Project project) {
         if (projectDtoRequest.getIdDepartment() != null){
             final Optional<Department> departmentProject = departmentDataService.findById(projectDtoRequest.getIdDepartment());

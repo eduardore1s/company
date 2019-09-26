@@ -12,4 +12,5 @@ public interface EmployeeDataService {
     void delete(Employee employee);
     Optional<Employee> findById(Long id);
     List<Employee> findByProjectListDepartmentId(Long idDepartment);
+    Optional<Employee> findByName(String name);
 }

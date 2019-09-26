@@ -17,10 +17,10 @@ INSERT INTO company.department(name, number) VALUES('SUPPORT', 111);
 INSERT INTO company.department(name, number) VALUES('HUMANS RESOURCE', 222);
 
 --project
-INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'Projeto 1', 1000, 1);
-INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'Projeto 2', 2000, 2);
-INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'Projeto 3', 3000, 3);
-INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'Projeto 4', 4000, 4);
+INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 1', 1000, 1);
+INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 2', 2000, 2);
+INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 3', 3000, 3);
+INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 4', 4000, 4);
 
 --employee_project
 INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(1, 1);

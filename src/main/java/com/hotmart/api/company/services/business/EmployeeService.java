@@ -13,4 +13,6 @@ public interface EmployeeService {
     boolean delete(Long id);
     EmployeeDtoResponse findById(Long id);
     List<EmployeeDtoResponse> findByProjectListDepartmentId(Long idDepartment);
+    EmployeeDtoResponse findByName(String name);
+
 }

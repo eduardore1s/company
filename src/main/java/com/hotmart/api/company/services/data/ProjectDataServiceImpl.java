@@ -33,4 +33,9 @@ public class ProjectDataServiceImpl implements ProjectDataService{
     public Optional<Project> findById(Long id) {
         return projectRepository.findById(id);
     }
+
+    @Override
+    public List<Project> findByEmployeeListId(Long idEmployee) {
+        return projectRepository.findByEmployeeListId(idEmployee);
+    }
 }
