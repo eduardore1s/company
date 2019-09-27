@@ -11,7 +11,7 @@ public interface EmployeeMapper {
 
     Employee toEmployee(EmployeeForm employeeForm);
 
-    EmployeeVo toEmployeeDtoResponse(Employee employee);
+    EmployeeVo toEmployeeVo(Employee employee);
 
     void updateEmployee(EmployeeForm employeeForm, @MappingTarget Employee employee);
 }

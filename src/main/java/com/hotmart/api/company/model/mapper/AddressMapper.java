@@ -11,7 +11,7 @@ public interface AddressMapper {
 
     Address toAddress(AddressForm addressForm);
 
-    AddressVo toAddressDtoResponse(Address address);
+    AddressVo toAddressVo(Address address);
 
     void updateAddress(AddressForm addressForm, @MappingTarget Address address);
 }

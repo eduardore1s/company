@@ -28,7 +28,7 @@ public class EmployeeService {
 
         final List<Employee>  employeeList = employeeRepository.findAll();
         if (!employeeList.isEmpty()){
-            return employeeList.stream().map(employeeMapper::toEmployeeDtoResponse).collect(Collectors.toList());
+            return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return null;
     }
@@ -40,7 +40,7 @@ public class EmployeeService {
         setAddressEmployee(employeeForm, employee);
         setSupervisorEmployee(employeeForm, employee);
 
-        return employeeMapper.toEmployeeDtoResponse(employeeRepository.save(employee));
+        return employeeMapper.toEmployeeVo(employeeRepository.save(employee));
     }
 
     public EmployeeVo update(Long id, EmployeeForm employeeForm) {
@@ -55,7 +55,7 @@ public class EmployeeService {
             setAddressEmployee(employeeForm, employee);
             setSupervisorEmployee(employeeForm, employee);
 
-            return employeeMapper.toEmployeeDtoResponse(employeeRepository.save(employee));
+            return employeeMapper.toEmployeeVo(employeeRepository.save(employee));
         }
         return null;
     }
@@ -76,7 +76,7 @@ public class EmployeeService {
         final Optional<Employee> employee = employeeRepository.findById(id);
 
         if (employee.isPresent()){
-            return employeeMapper.toEmployeeDtoResponse(employee.get());
+            return employeeMapper.toEmployeeVo(employee.get());
         }
 
         return null;
@@ -86,7 +86,7 @@ public class EmployeeService {
 
         final List<Employee>  employeeList = employeeRepository.findByProjectListDepartmentId(idDepartment);
         if (!employeeList.isEmpty()){
-            return employeeList.stream().map(employeeMapper::toEmployeeDtoResponse).collect(Collectors.toList());
+            return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return null;
     }
@@ -96,7 +96,7 @@ public class EmployeeService {
         final Optional<Employee> employee = employeeRepository.findByName(name);
 
         if (employee.isPresent()){
-            return employeeMapper.toEmployeeDtoResponse(employee.get());
+            return employeeMapper.toEmployeeVo(employee.get());
         }
 
         return null;
@@ -106,7 +106,7 @@ public class EmployeeService {
 
         final List<Employee>  employeeList = employeeRepository.findBySupervisorId(idSupervisor);
         if (!employeeList.isEmpty()){
-            return employeeList.stream().map(employeeMapper::toEmployeeDtoResponse).collect(Collectors.toList());
+            return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return null;
     }

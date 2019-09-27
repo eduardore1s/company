@@ -1,9 +1,11 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.data.AddressDataFactory;
 import com.hotmart.api.company.controller.form.AddressForm;
 import com.hotmart.api.company.controller.vo.AddressVo;
+import com.hotmart.api.company.data.AddressDataFactory;
 import com.hotmart.api.company.model.entity.Address;
+import com.hotmart.api.company.model.exception.GenericErrorException;
+import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.model.mapper.AddressMapperImpl;
 import com.hotmart.api.company.repository.AddressRepository;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @RunWith(MockitoJUnitRunner.class)
 public class AddressServiceTest {
 
-    private AddressService addressServiceImpl;
+    private AddressService addressService;
 
     private AddressMapper addressMapper;
 
@@ -32,7 +34,7 @@ public class AddressServiceTest {
     @Before
     public void init(){
         addressMapper = new AddressMapperImpl();
-        addressServiceImpl = new AddressService(addressMapper, addressRepository);
+        addressService = new AddressService(addressMapper, addressRepository);
     }
 
     @Test
@@ -43,7 +45,7 @@ public class AddressServiceTest {
         addressList.add(AddressDataFactory.buildAddress(3L));
         Mockito.when(addressRepository.findAll()).thenReturn(addressList);
 
-        final List<AddressVo> addressListDtoResponse = addressServiceImpl.findAll();
+        final List<AddressVo> addressListDtoResponse = addressService.findAll();
 
         Assert.assertTrue(addressListDtoResponse.size() == 3);
         Assert.assertEquals(addressList.get(0).getStreet(), addressListDtoResponse.get(0).getStreet());
@@ -57,20 +59,21 @@ public class AddressServiceTest {
     }
 
     @Test
-    public void findAllShouldReturnNull(){
+    public void findAllShouldReturnListEmpty(){
         Mockito.when(addressRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<AddressVo> addressListDtoResponse = addressServiceImpl.findAll();
+        final List<AddressVo> addressListDtoResponse = addressService.findAll();
 
-        Assert.assertNull(addressListDtoResponse);
+        Assert.assertNotNull(addressListDtoResponse);
+        Assert.assertTrue(addressListDtoResponse.isEmpty());
     }
 
     @Test
-    public void createShouldReturnAddressDtoResponse(){
+    public void createShouldReturnAddressDtoResponse() throws GenericErrorException {
         final AddressForm addressForm = AddressDataFactory.buildAddressDtoRequest(1L);
         Mockito.when(addressRepository.save(Mockito.any())).thenReturn(addressMapper.toAddress(addressForm));
 
-        final AddressVo addressVo = addressServiceImpl.create(addressForm);
+        final AddressVo addressVo = addressService.create(addressForm);
 
         Assert.assertEquals(addressForm.getStreet(), addressVo.getStreet());
         Assert.assertEquals(addressForm.getCity(), addressVo.getCity());
@@ -80,13 +83,13 @@ public class AddressServiceTest {
     }
 
     @Test
-    public void updateShouldReturnAddressDtoResponse(){
+    public void updateShouldReturnAddressDtoResponse() throws ResourceNotFoundException {
         final Optional<Address> optionalAddress = Optional.of(AddressDataFactory.buildAddress(1L));
         Mockito.when(addressRepository.findById(1L)).thenReturn(optionalAddress);
 
         final AddressForm addressForm = AddressDataFactory.buildAddressDtoRequest(2L);
 
-        final AddressVo addressVo = addressServiceImpl.update(1L, addressForm);
+        final AddressVo addressVo = addressService.update(1L, addressForm);
 
         Assert.assertEquals(addressForm.getStreet(), addressVo.getStreet());
         Assert.assertEquals(addressForm.getCity(), addressVo.getCity());
@@ -95,36 +98,34 @@ public class AddressServiceTest {
         Assert.assertEquals(addressForm.getZipCode(), addressVo.getZipCode());
     }
 
-    @Test
-    public void updateShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateShouldReturnResourceNotFoundException() throws ResourceNotFoundException {
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final AddressVo addressVo = addressServiceImpl.update(1L, null);
-
-        Assert.assertNull(addressVo);
+        addressService.update(1L, null);
     }
 
     @Test
-    public void deleteShouldReturnTrue(){
+    public void deleteShouldReturnTrue() throws ResourceNotFoundException {
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(new Address()));
 
-        Assert.assertTrue(addressServiceImpl.delete(1L));
+        Assert.assertTrue(addressService.delete(1L));
     }
 
 
-    @Test
-    public void deleteShouldReturnFalse(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteShouldReturnResourceNotFoundException() throws ResourceNotFoundException {
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertFalse(addressServiceImpl.delete(1L));
+       addressService.delete(1L);
     }
 
     @Test
-    public void findByIdShouldReturnAddressDtoResponse(){
+    public void findByIdShouldReturnAddressDtoResponse() throws ResourceNotFoundException {
         final Address address = AddressDataFactory.buildAddress(1L);
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
 
-        final AddressVo addressVo = addressServiceImpl.findById(1L);
+        final AddressVo addressVo = addressService.findById(1L);
 
         Assert.assertEquals(address.getStreet(), addressVo.getStreet());
         Assert.assertEquals(address.getZipCode(), addressVo.getZipCode());
@@ -133,11 +134,11 @@ public class AddressServiceTest {
         Assert.assertEquals(address.getCity(), addressVo.getCity());
     }
 
-    @Test
-    public void findByIdShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void findByIdShouldReturnResourceNotFoundExceptionl() throws ResourceNotFoundException {
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertNull(addressServiceImpl.findById(1L));
+        addressService.findById(1L);
     }
 
 

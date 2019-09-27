@@ -28,7 +28,7 @@ public class ProjectService {
 
         final List<Project>  projectList = projectRepository.findAll();
         if (!projectList.isEmpty()){
-            return projectList.stream().map(projectMapper::toProjectDtoResponse).collect(Collectors.toList());
+            return projectList.stream().map(projectMapper::toProjectVo).collect(Collectors.toList());
         }
         return null;
     }
@@ -39,7 +39,7 @@ public class ProjectService {
 
         setDepartmentProject(projectForm, project);
 
-        return projectMapper.toProjectDtoResponse(projectRepository.save(project));
+        return projectMapper.toProjectVo(projectRepository.save(project));
     }
 
     public ProjectVo update(Long id, ProjectForm projectForm) {
@@ -53,7 +53,7 @@ public class ProjectService {
 
             setDepartmentProject(projectForm, project);
 
-            return projectMapper.toProjectDtoResponse(projectRepository.save(project));
+            return projectMapper.toProjectVo(projectRepository.save(project));
         }
         return null;
     }
@@ -74,7 +74,7 @@ public class ProjectService {
         final Optional<Project> project = projectRepository.findById(id);
 
         if (project.isPresent()){
-            return projectMapper.toProjectDtoResponse(project.get());
+            return projectMapper.toProjectVo(project.get());
         }
 
         return null;
@@ -84,7 +84,7 @@ public class ProjectService {
 
         final List<Project>  projectList = projectRepository.findByEmployeeListId(idEmployee);
         if (!projectList.isEmpty()){
-            return projectList.stream().map(projectMapper::toProjectDtoResponse).collect(Collectors.toList());
+            return projectList.stream().map(projectMapper::toProjectVo).collect(Collectors.toList());
         }
         return null;
     }

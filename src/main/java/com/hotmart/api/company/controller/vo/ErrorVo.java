@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class ValidationErrorVo {
+public class ErrorVo {
 
     private String field;
     private String message;

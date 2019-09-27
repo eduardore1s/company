@@ -11,7 +11,7 @@ public interface ProjectMapper {
 
     Project toProject(ProjectForm projectForm);
 
-    ProjectVo toProjectDtoResponse(Project project);
+    ProjectVo toProjectVo(Project project);
 
     void updateProject(ProjectForm projectForm, @MappingTarget Project project);
 }
