@@ -7,8 +7,8 @@ import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;
 import com.hotmart.api.company.model.mapper.EmployeeMapperImpl;
-import com.hotmart.api.company.services.data.AddressDataService;
-import com.hotmart.api.company.services.data.EmployeeDataService;
+import com.hotmart.api.company.repository.AddressRepository;
+import com.hotmart.api.company.repository.EmployeeRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,22 +22,22 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
-public class EmployeeServiceImplTest {
+public class EmployeeServiceTest {
 
-    private EmployeeServiceImpl employeeServiceImpl;
+    private EmployeeService employeeServiceImpl;
 
     private EmployeeMapper employeeMapper;
 
     @Mock
-    private EmployeeDataService employeeDataService;
+    private EmployeeRepository employeeRepository;
 
     @Mock
-    private AddressDataService addressDataService;
+    private AddressRepository addressRepository;
 
     @Before
     public void init(){
         employeeMapper = new EmployeeMapperImpl();
-        employeeServiceImpl = new EmployeeServiceImpl(employeeMapper, employeeDataService, addressDataService);
+        employeeServiceImpl = new EmployeeService(employeeMapper, employeeRepository, addressRepository);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class EmployeeServiceImplTest {
         employeeList.add(EmployeeDataFactory.buildEmployee(1L));
         employeeList.add(EmployeeDataFactory.buildEmployee(2L));
         employeeList.add(EmployeeDataFactory.buildEmployee(3L));
-        Mockito.when(employeeDataService.findAll()).thenReturn(employeeList);
+        Mockito.when(employeeRepository.findAll()).thenReturn(employeeList);
 
         final List<EmployeeDtoResponse> employeeListDtoResponse = employeeServiceImpl.findAll();
 
@@ -66,7 +66,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void findAllShouldReturnNull(){
-        Mockito.when(employeeDataService.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(employeeRepository.findAll()).thenReturn(new ArrayList<>());
 
         final List<EmployeeDtoResponse> employeeListDtoResponse = employeeServiceImpl.findAll();
 
@@ -81,17 +81,17 @@ public class EmployeeServiceImplTest {
         final Address address = new Address();
         address.setId(employeeDtoRequest.getIdAddress());
         final Optional<Address> addressEmployee = Optional.of(address);
-        Mockito.when(addressDataService.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
+        Mockito.when(addressRepository.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
 
         final Employee supervisor = new Employee();
         supervisor.setId(employeeDtoRequest.getIdSupervisor());
         final Optional<Employee> supervisorEmployee = Optional.of(supervisor);
-        Mockito.when(employeeDataService.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
+        Mockito.when(employeeRepository.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
 
         final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
         employee.setAddress(addressEmployee.get());
         employee.setSupervisor(supervisorEmployee.get());
-        Mockito.when(employeeDataService.save(Mockito.any())).thenReturn(employee);
+        Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
 
         final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.create(employeeDtoRequest);
 
@@ -108,24 +108,24 @@ public class EmployeeServiceImplTest {
     @Test
     public void updateShouldReturnEmployeeDtoResponse(){
         final Optional<Employee> optionalEmployee = Optional.of(EmployeeDataFactory.buildEmployee(1L));
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(optionalEmployee);
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(optionalEmployee);
 
         final EmployeeDtoRequest employeeDtoRequest = EmployeeDataFactory.buildEmployeeDtoRequest(2L);
 
         final Address address = new Address();
         address.setId(employeeDtoRequest.getIdAddress());
         final Optional<Address> addressEmployee = Optional.of(address);
-        Mockito.when(addressDataService.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
+        Mockito.when(addressRepository.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
 
         final Employee supervisor = new Employee();
         supervisor.setId(employeeDtoRequest.getIdSupervisor());
         final Optional<Employee> supervisorEmployee = Optional.of(supervisor);
-        Mockito.when(employeeDataService.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
+        Mockito.when(employeeRepository.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
 
         final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
         employee.setAddress(addressEmployee.get());
         employee.setSupervisor(supervisorEmployee.get());
-        Mockito.when(employeeDataService.save(Mockito.any())).thenReturn(employee);
+        Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
 
         final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.update(1L, employeeDtoRequest);
 
@@ -142,7 +142,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void updateShouldReturnNull(){
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
         final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.update(1L, null);
 
@@ -151,7 +151,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void deleteShouldReturnTrue(){
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(Optional.of(new Employee()));
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.of(new Employee()));
 
         Assert.assertTrue(employeeServiceImpl.delete(1L));
     }
@@ -159,7 +159,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void deleteShouldReturnFalse(){
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertFalse(employeeServiceImpl.delete(1L));
     }
@@ -167,7 +167,7 @@ public class EmployeeServiceImplTest {
     @Test
     public void findByIdShouldReturnEmployeeDtoResponse(){
         final Employee employee = EmployeeDataFactory.buildEmployee(1L);
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(Optional.of(employee));
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 
         final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.findById(1L);
 
@@ -183,7 +183,7 @@ public class EmployeeServiceImplTest {
 
     @Test
     public void findByIdShouldReturnNull(){
-        Mockito.when(employeeDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertNull(employeeServiceImpl.findById(1L));
     }

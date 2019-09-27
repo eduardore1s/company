@@ -7,8 +7,8 @@ import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
 import com.hotmart.api.company.model.mapper.ProjectMapperImpl;
-import com.hotmart.api.company.services.data.DepartmentDataService;
-import com.hotmart.api.company.services.data.ProjectDataService;
+import com.hotmart.api.company.repository.DepartmentRepository;
+import com.hotmart.api.company.repository.ProjectRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,22 +22,22 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ProjectServiceImplTest {
+public class ProjectServiceTest {
 
-    private ProjectServiceImpl projectServiceImpl;
+    private ProjectService projectServiceImpl;
 
     private ProjectMapper projectMapper;
 
     @Mock
-    private ProjectDataService projectDataService;
+    private ProjectRepository projectRepository;
 
     @Mock
-    private DepartmentDataService departmentDataService;
+    private DepartmentRepository departmentRepository;
 
     @Before
     public void init(){
         projectMapper = new ProjectMapperImpl();
-        projectServiceImpl = new ProjectServiceImpl(projectMapper, projectDataService, departmentDataService);
+        projectServiceImpl = new ProjectService(projectMapper, projectRepository, departmentRepository);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ProjectServiceImplTest {
         projectList.add(ProjectDataFactory.buildProject(1L));
         projectList.add(ProjectDataFactory.buildProject(2L));
         projectList.add(ProjectDataFactory.buildProject(3L));
-        Mockito.when(projectDataService.findAll()).thenReturn(projectList);
+        Mockito.when(projectRepository.findAll()).thenReturn(projectList);
 
         final List<ProjectDtoResponse> employeeListDtoResponse = projectServiceImpl.findAll();
 
@@ -65,7 +65,7 @@ public class ProjectServiceImplTest {
 
     @Test
     public void findAllShouldReturnNull(){
-        Mockito.when(projectDataService.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(projectRepository.findAll()).thenReturn(new ArrayList<>());
 
         final List<ProjectDtoResponse> projectListDtoResponse = projectServiceImpl.findAll();
 
@@ -79,11 +79,11 @@ public class ProjectServiceImplTest {
         final Department department = new Department();
         department.setId(projectDtoRequest.getIdDepartment());
         final Optional<Department> departmentProject = Optional.of(department);
-        Mockito.when(departmentDataService.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
+        Mockito.when(departmentRepository.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
 
         final Project project = projectMapper.toProject(projectDtoRequest);
         project.setDepartment(departmentProject.get());
-        Mockito.when(projectDataService.save(Mockito.any())).thenReturn(project);
+        Mockito.when(projectRepository.save(Mockito.any())).thenReturn(project);
 
         final ProjectDtoResponse projectDtoResponse = projectServiceImpl.create(projectDtoRequest);
 
@@ -99,18 +99,18 @@ public class ProjectServiceImplTest {
     @Test
     public void updateShouldReturnEmployeeDtoResponse(){
         final Optional<Project> optionalProject = Optional.of(ProjectDataFactory.buildProject(1L));
-        Mockito.when(projectDataService.findById(1L)).thenReturn(optionalProject);
+        Mockito.when(projectRepository.findById(1L)).thenReturn(optionalProject);
 
         final ProjectDtoRequest projectDtoRequest = ProjectDataFactory.buildProjectDtoRequest(2L);
 
         final Department department = new Department();
         department.setId(projectDtoRequest.getIdDepartment());
         final Optional<Department> departmentProject = Optional.of(department);
-        Mockito.when(departmentDataService.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
+        Mockito.when(departmentRepository.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
 
         final Project project = projectMapper.toProject(projectDtoRequest);
         project.setDepartment(departmentProject.get());
-        Mockito.when(projectDataService.save(Mockito.any())).thenReturn(project);
+        Mockito.when(projectRepository.save(Mockito.any())).thenReturn(project);
 
         final ProjectDtoResponse projectDtoResponse = projectServiceImpl.update(1L, projectDtoRequest);
 
@@ -125,7 +125,7 @@ public class ProjectServiceImplTest {
 
     @Test
     public void updateShouldReturnNull(){
-        Mockito.when(projectDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         final ProjectDtoResponse projectDtoResponse = projectServiceImpl.update(1L, null);
 
@@ -135,7 +135,7 @@ public class ProjectServiceImplTest {
 
     @Test
     public void deleteShouldReturnTrue(){
-        Mockito.when(projectDataService.findById(1L)).thenReturn(Optional.of(new Project()));
+        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(new Project()));
 
         Assert.assertTrue(projectServiceImpl.delete(1L));
     }
@@ -143,7 +143,7 @@ public class ProjectServiceImplTest {
 
     @Test
     public void deleteShouldReturnFalse(){
-        Mockito.when(projectDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertFalse(projectServiceImpl.delete(1L));
     }
@@ -151,7 +151,7 @@ public class ProjectServiceImplTest {
     @Test
     public void findByIdShouldReturnProjectDtoResponse(){
         final Project project = ProjectDataFactory.buildProject(1L);
-        Mockito.when(projectDataService.findById(1L)).thenReturn(Optional.of(project));
+        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
         final ProjectDtoResponse projectDtoResponse = projectServiceImpl.findById(1L);
 
@@ -167,7 +167,7 @@ public class ProjectServiceImplTest {
 
     @Test
     public void findByIdShouldReturnNull(){
-        Mockito.when(projectDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertNull(projectServiceImpl.findById(1L));
     }

@@ -6,7 +6,7 @@ import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.model.mapper.AddressMapperImpl;
-import com.hotmart.api.company.services.data.AddressDataService;
+import com.hotmart.api.company.repository.AddressRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AddressServiceImplTest {
+public class AddressServiceTest {
 
-    private AddressServiceImpl addressServiceImpl;
+    private AddressService addressServiceImpl;
 
     private AddressMapper addressMapper;
 
     @Mock
-    private AddressDataService addressDataService;
+    private AddressRepository addressRepository;
 
     @Before
     public void init(){
         addressMapper = new AddressMapperImpl();
-        addressServiceImpl = new AddressServiceImpl(addressMapper, addressDataService);
+        addressServiceImpl = new AddressService(addressMapper, addressRepository);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class AddressServiceImplTest {
         addressList.add(AddressDataFactory.buildAddress(1L));
         addressList.add(AddressDataFactory.buildAddress(2L));
         addressList.add(AddressDataFactory.buildAddress(3L));
-        Mockito.when(addressDataService.findAll()).thenReturn(addressList);
+        Mockito.when(addressRepository.findAll()).thenReturn(addressList);
 
         final List<AddressDtoResponse> addressListDtoResponse = addressServiceImpl.findAll();
 
@@ -58,7 +58,7 @@ public class AddressServiceImplTest {
 
     @Test
     public void findAllShouldReturnNull(){
-        Mockito.when(addressDataService.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(addressRepository.findAll()).thenReturn(new ArrayList<>());
 
         final List<AddressDtoResponse> addressListDtoResponse = addressServiceImpl.findAll();
 
@@ -68,7 +68,7 @@ public class AddressServiceImplTest {
     @Test
     public void createShouldReturnAddressDtoResponse(){
         final AddressDtoRequest addressDtoRequest = AddressDataFactory.buildAddressDtoRequest(1L);
-        Mockito.when(addressDataService.save(Mockito.any())).thenReturn(addressMapper.toAddress(addressDtoRequest));
+        Mockito.when(addressRepository.save(Mockito.any())).thenReturn(addressMapper.toAddress(addressDtoRequest));
 
         final AddressDtoResponse addressDtoResponse = addressServiceImpl.create(addressDtoRequest);
 
@@ -82,7 +82,7 @@ public class AddressServiceImplTest {
     @Test
     public void updateShouldReturnAddressDtoResponse(){
         final Optional<Address> optionalAddress = Optional.of(AddressDataFactory.buildAddress(1L));
-        Mockito.when(addressDataService.findById(1L)).thenReturn(optionalAddress);
+        Mockito.when(addressRepository.findById(1L)).thenReturn(optionalAddress);
 
         final AddressDtoRequest addressDtoRequest = AddressDataFactory.buildAddressDtoRequest(2L);
 
@@ -97,7 +97,7 @@ public class AddressServiceImplTest {
 
     @Test
     public void updateShouldReturnNull(){
-        Mockito.when(addressDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
         final AddressDtoResponse addressDtoResponse = addressServiceImpl.update(1L, null);
 
@@ -106,7 +106,7 @@ public class AddressServiceImplTest {
 
     @Test
     public void deleteShouldReturnTrue(){
-        Mockito.when(addressDataService.findById(1L)).thenReturn(Optional.of(new Address()));
+        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(new Address()));
 
         Assert.assertTrue(addressServiceImpl.delete(1L));
     }
@@ -114,7 +114,7 @@ public class AddressServiceImplTest {
 
     @Test
     public void deleteShouldReturnFalse(){
-        Mockito.when(addressDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertFalse(addressServiceImpl.delete(1L));
     }
@@ -122,7 +122,7 @@ public class AddressServiceImplTest {
     @Test
     public void findByIdShouldReturnAddressDtoResponse(){
         final Address address = AddressDataFactory.buildAddress(1L);
-        Mockito.when(addressDataService.findById(1L)).thenReturn(Optional.of(address));
+        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
 
         final AddressDtoResponse addressDtoResponse = addressServiceImpl.findById(1L);
 
@@ -135,7 +135,7 @@ public class AddressServiceImplTest {
 
     @Test
     public void findByIdShouldReturnNull(){
-        Mockito.when(addressDataService.findById(1L)).thenReturn(Optional.empty());
+        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
         Assert.assertNull(addressServiceImpl.findById(1L));
     }

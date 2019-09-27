@@ -82,16 +82,15 @@ public class DepartmentController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("{id}/employees")
+    public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long id){
 
-    @GetMapping("{idDepartment}/employees")
-    public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long idDepartment){
-
-        final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findByProjectListDepartmentId(idDepartment);
+        final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findByProjectListDepartmentId(id);
 
         if (employeeDtoResponseList != null) {
             return ResponseEntity.ok(employeeDtoResponseList);
         }
         return ResponseEntity.noContent().build();
-
     }
+
 }

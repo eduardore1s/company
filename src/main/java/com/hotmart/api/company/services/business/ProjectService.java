@@ -2,15 +2,101 @@ package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
 import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.entity.Department;
+import com.hotmart.api.company.model.entity.Project;
+import com.hotmart.api.company.model.mapper.ProjectMapper;
+import com.hotmart.api.company.repository.DepartmentRepository;
+import com.hotmart.api.company.repository.ProjectRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public interface ProjectService {
+@Service
+@RequiredArgsConstructor
+public class ProjectService {
 
-    List<ProjectDtoResponse> findAll();
-    ProjectDtoResponse create(ProjectDtoRequest projectDtoRequest);
-    ProjectDtoResponse update(Long id, ProjectDtoRequest projectDtoRequest);
-    boolean delete(Long id);
-    ProjectDtoResponse findById(Long id);
-    List<ProjectDtoResponse> findByEmployeeListId(Long idEmployee);
+    private final ProjectMapper projectMapper;
+
+    private final ProjectRepository projectRepository;
+
+    private final DepartmentRepository departmentRepository;
+
+    public List<ProjectDtoResponse> findAll() {
+
+        final List<Project>  projectList = projectRepository.findAll();
+        if (!projectList.isEmpty()){
+            return projectList.stream().map(projectMapper::toProjectDtoResponse).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    public ProjectDtoResponse create(ProjectDtoRequest projectDtoRequest) {
+
+        final Project project = projectMapper.toProject(projectDtoRequest);
+
+        setDepartmentProject(projectDtoRequest, project);
+
+        return projectMapper.toProjectDtoResponse(projectRepository.save(project));
+    }
+
+    public ProjectDtoResponse update(Long id, ProjectDtoRequest projectDtoRequest) {
+
+        final Optional<Project> projectOptional = projectRepository.findById(id);
+
+        if (projectOptional.isPresent()) {
+
+            final Project project = projectOptional.get();
+            projectMapper.updateProject(projectDtoRequest, project);
+
+            setDepartmentProject(projectDtoRequest, project);
+
+            return projectMapper.toProjectDtoResponse(projectRepository.save(project));
+        }
+        return null;
+    }
+
+    public boolean delete(Long id) {
+        final Optional<Project> projectOptional = projectRepository.findById(id);
+
+        if (projectOptional.isPresent()){
+            projectRepository.delete(projectOptional.get());
+            return true;
+        }
+
+        return false;
+    }
+
+    public ProjectDtoResponse findById(Long id) {
+
+        final Optional<Project> project = projectRepository.findById(id);
+
+        if (project.isPresent()){
+            return projectMapper.toProjectDtoResponse(project.get());
+        }
+
+        return null;
+    }
+
+    public List<ProjectDtoResponse> findByEmployeeListId(Long idEmployee) {
+
+        final List<Project>  projectList = projectRepository.findByEmployeeListId(idEmployee);
+        if (!projectList.isEmpty()){
+            return projectList.stream().map(projectMapper::toProjectDtoResponse).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    private void setDepartmentProject(ProjectDtoRequest projectDtoRequest, Project project) {
+        if (projectDtoRequest.getIdDepartment() != null){
+            final Optional<Department> departmentProject = departmentRepository.findById(projectDtoRequest.getIdDepartment());
+
+            if (departmentProject.isPresent()){
+                project.setDepartment(departmentProject.get());
+            }
+        }
+    }
+
 }
