@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.vo;
+package com.hotmart.api.company.controller.vo;
 
 import com.hotmart.api.company.model.entity.EmployeeGender;
 import lombok.Getter;

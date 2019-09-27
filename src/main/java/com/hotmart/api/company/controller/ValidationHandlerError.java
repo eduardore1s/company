@@ -1,6 +1,6 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.vo.ValidationErrorVo;
+import com.hotmart.api.company.controller.vo.ValidationErrorVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -36,4 +36,6 @@ public class ValidationHandlerError {
 
         return errorsDto;
     }
+
+
 }

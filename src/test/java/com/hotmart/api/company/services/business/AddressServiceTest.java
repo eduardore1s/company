@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.AddressDataFactory;
-import com.hotmart.api.company.model.form.AddressForm;
-import com.hotmart.api.company.model.vo.AddressVo;
+import com.hotmart.api.company.controller.form.AddressForm;
+import com.hotmart.api.company.controller.vo.AddressVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.model.mapper.AddressMapperImpl;

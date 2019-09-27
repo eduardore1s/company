@@ -1,6 +1,6 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.vo.EmployeeVo;
+import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.services.business.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

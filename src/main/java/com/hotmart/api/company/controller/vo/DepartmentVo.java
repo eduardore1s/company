@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.vo;
+package com.hotmart.api.company.controller.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

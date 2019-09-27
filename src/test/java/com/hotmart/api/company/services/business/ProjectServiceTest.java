@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.ProjectDataFactory;
-import com.hotmart.api.company.model.form.ProjectForm;
-import com.hotmart.api.company.model.vo.ProjectVo;
+import com.hotmart.api.company.controller.form.ProjectForm;
+import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
 import com.hotmart.api.company.model.mapper.ProjectMapper;

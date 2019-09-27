@@ -1,7 +1,7 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.form.ProjectForm;
-import com.hotmart.api.company.model.vo.ProjectVo;
+import com.hotmart.api.company.controller.form.ProjectForm;
+import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

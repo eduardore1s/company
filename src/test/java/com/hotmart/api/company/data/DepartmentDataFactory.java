@@ -1,6 +1,6 @@
 package com.hotmart.api.company.data;
 
-import com.hotmart.api.company.model.form.DepartmentForm;
+import com.hotmart.api.company.controller.form.DepartmentForm;
 import com.hotmart.api.company.model.entity.Budget;
 import com.hotmart.api.company.model.entity.Department;
 

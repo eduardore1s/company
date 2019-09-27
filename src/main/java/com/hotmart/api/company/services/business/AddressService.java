@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.form.AddressForm;
-import com.hotmart.api.company.model.vo.AddressVo;
+import com.hotmart.api.company.controller.form.AddressForm;
+import com.hotmart.api.company.controller.vo.AddressVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.repository.AddressRepository;
@@ -26,12 +26,18 @@ public class AddressService {
         if (!addressList.isEmpty()){
             return addressList.stream().map(addressMapper::toAddressDtoResponse).collect(Collectors.toList());
         }
-        return null;
+       return null;// new ArrayList<>();
     }
 
     public AddressVo create(AddressForm addressForm) {
         final Address address = addressRepository.save(addressMapper.toAddress(addressForm));
-        return addressMapper.toAddressDtoResponse(address);
+
+        //if (address != null){
+            return addressMapper.toAddressDtoResponse(address);
+//        }
+//
+//        return null; //throws exception de erro;
+
     }
 
     public AddressVo update(Long id, AddressForm addressForm) {
@@ -45,7 +51,7 @@ public class AddressService {
             return addressMapper.toAddressDtoResponse(address);
         }
 
-        return null;
+        return null; //throws expection de not found
     }
 
     public boolean delete(Long id) {
@@ -56,7 +62,7 @@ public class AddressService {
             return true;
         }
 
-        return false;
+        return false; //throws expection de not found
     }
 
     public AddressVo findById(Long id) {
@@ -67,7 +73,7 @@ public class AddressService {
             return addressMapper.toAddressDtoResponse(address.get());
         }
 
-        return null;
+        return null; //throws expection de not found
     }
 
 

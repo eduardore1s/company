@@ -1,7 +1,7 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.form.AddressForm;
-import com.hotmart.api.company.model.vo.AddressVo;
+import com.hotmart.api.company.controller.form.AddressForm;
+import com.hotmart.api.company.controller.vo.AddressVo;
 import com.hotmart.api.company.services.business.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

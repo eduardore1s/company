@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.form.DepartmentForm;
-import com.hotmart.api.company.model.vo.DepartmentVo;
+import com.hotmart.api.company.controller.form.DepartmentForm;
+import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.repository.DepartmentRepository;

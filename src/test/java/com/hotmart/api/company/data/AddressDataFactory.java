@@ -1,6 +1,6 @@
 package com.hotmart.api.company.data;
 
-import com.hotmart.api.company.model.form.AddressForm;
+import com.hotmart.api.company.controller.form.AddressForm;
 import com.hotmart.api.company.model.entity.Address;
 
 public class AddressDataFactory {

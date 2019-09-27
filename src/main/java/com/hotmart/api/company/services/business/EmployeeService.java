@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.form.EmployeeForm;
-import com.hotmart.api.company.model.vo.EmployeeVo;
+import com.hotmart.api.company.controller.form.EmployeeForm;
+import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;

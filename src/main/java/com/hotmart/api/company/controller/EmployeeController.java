@@ -1,8 +1,8 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.form.EmployeeForm;
-import com.hotmart.api.company.model.vo.EmployeeVo;
-import com.hotmart.api.company.model.vo.ProjectVo;
+import com.hotmart.api.company.controller.form.EmployeeForm;
+import com.hotmart.api.company.controller.vo.EmployeeVo;
+import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.services.business.EmployeeService;
 import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;

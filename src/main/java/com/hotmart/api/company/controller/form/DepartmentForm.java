@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.form;
+package com.hotmart.api.company.controller.form;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.hotmart.api.company.model.mapper;
 
-import com.hotmart.api.company.model.form.DepartmentForm;
-import com.hotmart.api.company.model.vo.DepartmentVo;
+import com.hotmart.api.company.controller.form.DepartmentForm;
+import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
