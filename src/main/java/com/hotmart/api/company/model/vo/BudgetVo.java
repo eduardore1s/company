@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.response;
+package com.hotmart.api.company.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BudgetDtoResponse {
+public class BudgetVo {
 
     private Long id;
 

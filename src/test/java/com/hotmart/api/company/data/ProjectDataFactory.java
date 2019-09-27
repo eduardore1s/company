@@ -1,6 +1,6 @@
 package com.hotmart.api.company.data;
 
-import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
+import com.hotmart.api.company.model.form.ProjectForm;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.entity.Project;
 
@@ -28,12 +28,12 @@ public class ProjectDataFactory {
     }
 
 
-    public static ProjectDtoRequest buildProjectDtoRequest(Long id){
+    public static ProjectForm buildProjectDtoRequest(Long id){
 
         final List<Long> employees = new ArrayList<>();
         employees.add(1L);
 
-        final ProjectDtoRequest project = new ProjectDtoRequest();
+        final ProjectForm project = new ProjectForm();
         project.setIdDepartment(1L);
         project.setDateStart(LocalDate.parse("2019-10-01"));
         project.setDateFinal(LocalDate.parse("2019-12-31"));

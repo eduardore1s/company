@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.dto.request.EmployeeDtoRequest;
-import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
+import com.hotmart.api.company.model.form.EmployeeForm;
+import com.hotmart.api.company.model.vo.EmployeeVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;
@@ -24,7 +24,7 @@ public class EmployeeService {
 
     private final AddressRepository addressRepository;
 
-    public List<EmployeeDtoResponse> findAll() {
+    public List<EmployeeVo> findAll() {
 
         final List<Employee>  employeeList = employeeRepository.findAll();
         if (!employeeList.isEmpty()){
@@ -33,27 +33,27 @@ public class EmployeeService {
         return null;
     }
 
-    public EmployeeDtoResponse create(EmployeeDtoRequest employeeDtoRequest) {
+    public EmployeeVo create(EmployeeForm employeeForm) {
 
-        final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
+        final Employee employee = employeeMapper.toEmployee(employeeForm);
 
-        setAddressEmployee(employeeDtoRequest, employee);
-        setSupervisorEmployee(employeeDtoRequest, employee);
+        setAddressEmployee(employeeForm, employee);
+        setSupervisorEmployee(employeeForm, employee);
 
         return employeeMapper.toEmployeeDtoResponse(employeeRepository.save(employee));
     }
 
-    public EmployeeDtoResponse update(Long id, EmployeeDtoRequest employeeDtoRequest) {
+    public EmployeeVo update(Long id, EmployeeForm employeeForm) {
 
         final Optional<Employee> employeeOptional = employeeRepository.findById(id);
 
         if (employeeOptional.isPresent()) {
 
             final Employee employee = employeeOptional.get();
-            employeeMapper.updateEmployee(employeeDtoRequest, employee);
+            employeeMapper.updateEmployee(employeeForm, employee);
 
-            setAddressEmployee(employeeDtoRequest, employee);
-            setSupervisorEmployee(employeeDtoRequest, employee);
+            setAddressEmployee(employeeForm, employee);
+            setSupervisorEmployee(employeeForm, employee);
 
             return employeeMapper.toEmployeeDtoResponse(employeeRepository.save(employee));
         }
@@ -71,7 +71,7 @@ public class EmployeeService {
         return false;
     }
 
-    public EmployeeDtoResponse findById(Long id) {
+    public EmployeeVo findById(Long id) {
 
         final Optional<Employee> employee = employeeRepository.findById(id);
 
@@ -82,7 +82,7 @@ public class EmployeeService {
         return null;
     }
 
-    public List<EmployeeDtoResponse> findByProjectListDepartmentId(Long idDepartment) {
+    public List<EmployeeVo> findByProjectListDepartmentId(Long idDepartment) {
 
         final List<Employee>  employeeList = employeeRepository.findByProjectListDepartmentId(idDepartment);
         if (!employeeList.isEmpty()){
@@ -91,7 +91,7 @@ public class EmployeeService {
         return null;
     }
 
-    public EmployeeDtoResponse findByName(String name) {
+    public EmployeeVo findByName(String name) {
 
         final Optional<Employee> employee = employeeRepository.findByName(name);
 
@@ -102,7 +102,7 @@ public class EmployeeService {
         return null;
     }
 
-    public List<EmployeeDtoResponse> findBySupervisorId(Long idSupervisor) {
+    public List<EmployeeVo> findBySupervisorId(Long idSupervisor) {
 
         final List<Employee>  employeeList = employeeRepository.findBySupervisorId(idSupervisor);
         if (!employeeList.isEmpty()){
@@ -111,9 +111,9 @@ public class EmployeeService {
         return null;
     }
 
-    private void setAddressEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
-        if (employeeDtoRequest.getIdAddress() != null){
-            final Optional<Address> addressEmployee = addressRepository.findById(employeeDtoRequest.getIdAddress());
+    private void setAddressEmployee(EmployeeForm employeeForm, Employee employee) {
+        if (employeeForm.getIdAddress() != null){
+            final Optional<Address> addressEmployee = addressRepository.findById(employeeForm.getIdAddress());
 
             if (addressEmployee.isPresent()){
                 employee.setAddress(addressEmployee.get());
@@ -121,9 +121,9 @@ public class EmployeeService {
         }
     }
 
-    private void setSupervisorEmployee(EmployeeDtoRequest employeeDtoRequest, Employee employee) {
-        if (employeeDtoRequest.getIdSupervisor() != null) {
-            final Optional<Employee> supervisorEmployee = employeeRepository.findById(employeeDtoRequest.getIdSupervisor());
+    private void setSupervisorEmployee(EmployeeForm employeeForm, Employee employee) {
+        if (employeeForm.getIdSupervisor() != null) {
+            final Optional<Employee> supervisorEmployee = employeeRepository.findById(employeeForm.getIdSupervisor());
 
             if (supervisorEmployee.isPresent()){
                 employee.setSupervisor(supervisorEmployee.get());

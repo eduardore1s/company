@@ -1,6 +1,6 @@
 package com.hotmart.api.company.data;
 
-import com.hotmart.api.company.model.dto.request.AddressDtoRequest;
+import com.hotmart.api.company.model.form.AddressForm;
 import com.hotmart.api.company.model.entity.Address;
 
 public class AddressDataFactory {
@@ -19,16 +19,16 @@ public class AddressDataFactory {
     }
 
 
-    public static AddressDtoRequest buildAddressDtoRequest(Long id){
+    public static AddressForm buildAddressDtoRequest(Long id){
 
-        final AddressDtoRequest addressDtoRequest = new AddressDtoRequest();
-        addressDtoRequest.setCity("CITY OF ID " + id.toString());
-        addressDtoRequest.setCountry("COUNTRY OF ID " + id.toString());
-        addressDtoRequest.setState("STATE OF ID ");
-        addressDtoRequest.setStreet("STREET OF ID " + id.toString());
-        addressDtoRequest.setZipCode("ZIP CODE OF ID " + id.toString());
+        final AddressForm addressForm = new AddressForm();
+        addressForm.setCity("CITY OF ID " + id.toString());
+        addressForm.setCountry("COUNTRY OF ID " + id.toString());
+        addressForm.setState("STATE OF ID ");
+        addressForm.setStreet("STREET OF ID " + id.toString());
+        addressForm.setZipCode("ZIP CODE OF ID " + id.toString());
 
-        return addressDtoRequest;
+        return addressForm;
     }
 
 

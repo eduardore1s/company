@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.response;
+package com.hotmart.api.company.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +11,13 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProjectDtoResponse {
+public class ProjectVo {
 
     private Long id;
 
     private String name;
 
-    private DepartmentDtoResponse department;
+    private DepartmentVo department;
 
     private BigDecimal value;
 
@@ -25,5 +25,5 @@ public class ProjectDtoResponse {
 
     private LocalDate dateFinal;
 
-    private List<EmployeeDtoResponse> employeeList;
+    private List<EmployeeVo> employeeList;
 }

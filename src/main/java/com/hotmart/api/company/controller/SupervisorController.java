@@ -1,6 +1,6 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
+import com.hotmart.api.company.model.vo.EmployeeVo;
 import com.hotmart.api.company.services.business.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,10 @@ public class SupervisorController {
     @GetMapping("/{id}/employees")
     public ResponseEntity<?> getEmployeesBySupervisor(@PathVariable Long id){
 
-        final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findBySupervisorId(id);
+        final List<EmployeeVo> employeeVoList = employeeService.findBySupervisorId(id);
 
-        if (employeeDtoResponseList != null) {
-            return ResponseEntity.ok(employeeDtoResponseList);
+        if (employeeVoList != null) {
+            return ResponseEntity.ok(employeeVoList);
         }
         return ResponseEntity.noContent().build();
     }

@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.dto.request.AddressDtoRequest;
-import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
+import com.hotmart.api.company.model.form.AddressForm;
+import com.hotmart.api.company.model.vo.AddressVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.repository.AddressRepository;
@@ -20,7 +20,7 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    public List<AddressDtoResponse> findAll() {
+    public List<AddressVo> findAll() {
 
         final List<Address> addressList = addressRepository.findAll();
         if (!addressList.isEmpty()){
@@ -29,17 +29,17 @@ public class AddressService {
         return null;
     }
 
-    public AddressDtoResponse create(AddressDtoRequest addressDtoRequest) {
-        final Address address = addressRepository.save(addressMapper.toAddress(addressDtoRequest));
+    public AddressVo create(AddressForm addressForm) {
+        final Address address = addressRepository.save(addressMapper.toAddress(addressForm));
         return addressMapper.toAddressDtoResponse(address);
     }
 
-    public AddressDtoResponse update(Long id, AddressDtoRequest addressDtoRequest) {
+    public AddressVo update(Long id, AddressForm addressForm) {
         final Optional<Address> addressOptional = addressRepository.findById(id);
 
         if (addressOptional.isPresent()){
             final Address address = addressOptional.get();
-            addressMapper.updateAddress(addressDtoRequest, address);
+            addressMapper.updateAddress(addressForm, address);
             addressRepository.save(address);
 
             return addressMapper.toAddressDtoResponse(address);
@@ -59,7 +59,7 @@ public class AddressService {
         return false;
     }
 
-    public AddressDtoResponse findById(Long id) {
+    public AddressVo findById(Long id) {
 
         final Optional<Address> address = addressRepository.findById(id);
 

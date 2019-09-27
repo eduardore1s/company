@@ -1,8 +1,8 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.dto.request.EmployeeDtoRequest;
-import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
-import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.form.EmployeeForm;
+import com.hotmart.api.company.model.vo.EmployeeVo;
+import com.hotmart.api.company.model.vo.ProjectVo;
 import com.hotmart.api.company.services.business.EmployeeService;
 import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,23 +28,23 @@ public class EmployeeController {
     @GetMapping
     public ResponseEntity<?> getEmployees(){
 
-        final List<EmployeeDtoResponse> employeeDtoResponseList = employeeService.findAll();
+        final List<EmployeeVo> employeeVoList = employeeService.findAll();
 
-        if (employeeDtoResponseList != null) {
-            return ResponseEntity.ok(employeeDtoResponseList);
+        if (employeeVoList != null) {
+            return ResponseEntity.ok(employeeVoList);
         }
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDtoResponse> postEmployee(@Valid @RequestBody EmployeeDtoRequest employeeDtoRequest,
-                                                          UriComponentsBuilder uriBuilder){
+    public ResponseEntity<EmployeeVo> postEmployee(@Valid @RequestBody EmployeeForm employeeForm,
+                                                   UriComponentsBuilder uriBuilder){
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeService.create(employeeDtoRequest);
+        final EmployeeVo employeeVo = employeeService.create(employeeForm);
 
-        if (employeeDtoResponse != null){
-            final URI uri = uriBuilder.path("api/v1/employee/{id}").buildAndExpand(employeeDtoResponse.getId()).toUri();
-            return ResponseEntity.created(uri).body(employeeDtoResponse);
+        if (employeeVo != null){
+            final URI uri = uriBuilder.path("api/v1/employee/{id}").buildAndExpand(employeeVo.getId()).toUri();
+            return ResponseEntity.created(uri).body(employeeVo);
         }
         return ResponseEntity.unprocessableEntity().build();
     }
@@ -52,29 +52,29 @@ public class EmployeeController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getEmployee(@PathVariable Long id){
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeService.findById(id);
+        final EmployeeVo employeeVo = employeeService.findById(id);
 
-        if (employeeDtoResponse != null) {
-            return ResponseEntity.ok(employeeDtoResponse);
+        if (employeeVo != null) {
+            return ResponseEntity.ok(employeeVo);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmployeeDtoResponse> putEmployee(@PathVariable Long id,
-                                                         @Valid @RequestBody EmployeeDtoRequest employeeDtoRequest){
+    public ResponseEntity<EmployeeVo> putEmployee(@PathVariable Long id,
+                                                  @Valid @RequestBody EmployeeForm employeeForm){
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeService.update(id, employeeDtoRequest);
+        final EmployeeVo employeeVo = employeeService.update(id, employeeForm);
 
-        if (employeeDtoResponse != null){
-            return new ResponseEntity<>(employeeDtoResponse, HttpStatus.CREATED);
+        if (employeeVo != null){
+            return new ResponseEntity<>(employeeVo, HttpStatus.CREATED);
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeDtoResponse> deleteEmployee(@PathVariable Long id){
+    public ResponseEntity<EmployeeVo> deleteEmployee(@PathVariable Long id){
 
         if (employeeService.delete(id)) {
             return ResponseEntity.noContent().build();
@@ -86,10 +86,10 @@ public class EmployeeController {
     @GetMapping("/search")
     public ResponseEntity<?> getEmployeeByName(@RequestParam String name){
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeService.findByName(name);
+        final EmployeeVo employeeVo = employeeService.findByName(name);
 
-        if (employeeDtoResponse != null) {
-            return ResponseEntity.ok(employeeDtoResponse);
+        if (employeeVo != null) {
+            return ResponseEntity.ok(employeeVo);
         }
         return ResponseEntity.notFound().build();
     }
@@ -98,7 +98,7 @@ public class EmployeeController {
     @GetMapping("/{id}/projects")
     public ResponseEntity<?> getProjectsByEmployee(@PathVariable Long id){
 
-        final List<ProjectDtoResponse> projectsDtoResponseList = projectService.findByEmployeeListId(id);
+        final List<ProjectVo> projectsDtoResponseList = projectService.findByEmployeeListId(id);
 
         if (projectsDtoResponseList != null) {
             return ResponseEntity.ok(projectsDtoResponseList);

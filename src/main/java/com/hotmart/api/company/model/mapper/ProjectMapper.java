@@ -1,7 +1,7 @@
 package com.hotmart.api.company.model.mapper;
 
-import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
-import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.form.ProjectForm;
+import com.hotmart.api.company.model.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Project;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -9,9 +9,9 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface ProjectMapper {
 
-    Project toProject(ProjectDtoRequest projectDtoRequest);
+    Project toProject(ProjectForm projectForm);
 
-    ProjectDtoResponse toProjectDtoResponse(Project project);
+    ProjectVo toProjectDtoResponse(Project project);
 
-    void updateProject(ProjectDtoRequest projectDtoRequest, @MappingTarget Project project);
+    void updateProject(ProjectForm projectForm, @MappingTarget Project project);
 }

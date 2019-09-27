@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.response;
+package com.hotmart.api.company.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class DepartmentDtoResponse {
+public class DepartmentVo {
 
     private Long id;
 
@@ -17,5 +17,5 @@ public class DepartmentDtoResponse {
 
     private Integer number;
 
-    private List<BudgetDtoResponse> budgets;
+    private List<BudgetVo> budgets;
 }

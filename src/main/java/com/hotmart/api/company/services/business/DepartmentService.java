@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.dto.request.DepartmentDtoRequest;
-import com.hotmart.api.company.model.dto.response.DepartmentDtoResponse;
+import com.hotmart.api.company.model.form.DepartmentForm;
+import com.hotmart.api.company.model.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.repository.DepartmentRepository;
@@ -20,29 +20,29 @@ public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
-    public List<DepartmentDtoResponse> findAll() {
+    public List<DepartmentVo> findAll() {
         
         final List<Department>  departmentList = departmentRepository.findAll();
         if (!departmentList.isEmpty()){
-            return departmentList.stream().map(departmentMapper::toDepartmentDtoResponse).collect(Collectors.toList());
+            return departmentList.stream().map(departmentMapper::toDepartmentVo).collect(Collectors.toList());
         }
         return null;
     }
 
-    public DepartmentDtoResponse create(DepartmentDtoRequest departmentDtoRequest) {
-        final Department department = departmentRepository.save(departmentMapper.toDepartment(departmentDtoRequest));
-        return departmentMapper.toDepartmentDtoResponse(department);
+    public DepartmentVo create(DepartmentForm departmentForm) {
+        final Department department = departmentRepository.save(departmentMapper.toDepartment(departmentForm));
+        return departmentMapper.toDepartmentVo(department);
     }
 
-    public DepartmentDtoResponse update(Long id, DepartmentDtoRequest departmentDtoRequest) {
+    public DepartmentVo update(Long id, DepartmentForm departmentForm) {
         final Optional<Department> departmentOptional = departmentRepository.findById(id);
 
         if (departmentOptional.isPresent()){
             final Department department = departmentOptional.get();
-            departmentMapper.updateDepartment(departmentDtoRequest, department);
+            departmentMapper.updateDepartment(departmentForm, department);
             departmentRepository.save(department);
 
-            return departmentMapper.toDepartmentDtoResponse(department);
+            return departmentMapper.toDepartmentVo(department);
         }
 
         return null;
@@ -59,12 +59,12 @@ public class DepartmentService {
         return false;
     }
 
-    public DepartmentDtoResponse findById(Long id) {
+    public DepartmentVo findById(Long id) {
 
         final Optional<Department> department = departmentRepository.findById(id);
 
         if (department.isPresent()){
-            return departmentMapper.toDepartmentDtoResponse(department.get());
+            return departmentMapper.toDepartmentVo(department.get());
         }
 
         return null;

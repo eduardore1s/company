@@ -1,6 +1,6 @@
 package com.hotmart.api.company.data;
 
-import com.hotmart.api.company.model.dto.request.EmployeeDtoRequest;
+import com.hotmart.api.company.model.form.EmployeeForm;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.entity.EmployeeGender;
 
@@ -37,9 +37,9 @@ public class EmployeeDataFactory {
     }
 
 
-    public static EmployeeDtoRequest buildEmployeeDtoRequest(Long id){
+    public static EmployeeForm buildEmployeeDtoRequest(Long id){
 
-        final EmployeeDtoRequest employee = new EmployeeDtoRequest();
+        final EmployeeForm employee = new EmployeeForm();
         employee.setIdSupervisor(id + 1000);
         employee.setIdAddress(2L);
         employee.setGender(EmployeeGender.MALE.toString());

@@ -1,6 +1,6 @@
-package com.hotmart.api.company.config.validation;
+package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.dto.ValidationErrorDto;
+import com.hotmart.api.company.model.vo.ValidationErrorVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,16 +22,16 @@ public class ValidationHandlerError {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ValidationErrorDto> handle(MethodArgumentNotValidException exception){
-        final List<ValidationErrorDto> errorsDto = new ArrayList<>();
+    public List<ValidationErrorVo> handle(MethodArgumentNotValidException exception){
+        final List<ValidationErrorVo> errorsDto = new ArrayList<>();
 
         final List<FieldError> errors = exception.getBindingResult().getFieldErrors();
         errors.forEach(e -> {
             final String message = messageSource.getMessage(e, LocaleContextHolder.getLocale());
-            final ValidationErrorDto validationErrorDto =
-                    ValidationErrorDto.builder().field(e.getField()).message(message).build();
+            final ValidationErrorVo validationErrorVo =
+                    ValidationErrorVo.builder().field(e.getField()).message(message).build();
 
-            errorsDto.add(validationErrorDto);
+            errorsDto.add(validationErrorVo);
         });
 
         return errorsDto;

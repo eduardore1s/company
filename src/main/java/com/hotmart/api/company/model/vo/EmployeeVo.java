@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.response;
+package com.hotmart.api.company.model.vo;
 
 import com.hotmart.api.company.model.entity.EmployeeGender;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EmployeeDtoResponse {
+public class EmployeeVo {
 
     private Long id;
 
@@ -23,9 +23,9 @@ public class EmployeeDtoResponse {
 
     private EmployeeGender gender;
 
-    private AddressDtoResponse address;
+    private AddressVo address;
 
-    private EmployeeDtoResponse supervisor;
+    private EmployeeVo supervisor;
 
     private BigDecimal salary;
 }

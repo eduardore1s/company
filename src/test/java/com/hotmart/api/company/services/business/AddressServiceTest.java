@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.AddressDataFactory;
-import com.hotmart.api.company.model.dto.request.AddressDtoRequest;
-import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
+import com.hotmart.api.company.model.form.AddressForm;
+import com.hotmart.api.company.model.vo.AddressVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.model.mapper.AddressMapperImpl;
@@ -43,7 +43,7 @@ public class AddressServiceTest {
         addressList.add(AddressDataFactory.buildAddress(3L));
         Mockito.when(addressRepository.findAll()).thenReturn(addressList);
 
-        final List<AddressDtoResponse> addressListDtoResponse = addressServiceImpl.findAll();
+        final List<AddressVo> addressListDtoResponse = addressServiceImpl.findAll();
 
         Assert.assertTrue(addressListDtoResponse.size() == 3);
         Assert.assertEquals(addressList.get(0).getStreet(), addressListDtoResponse.get(0).getStreet());
@@ -60,23 +60,23 @@ public class AddressServiceTest {
     public void findAllShouldReturnNull(){
         Mockito.when(addressRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<AddressDtoResponse> addressListDtoResponse = addressServiceImpl.findAll();
+        final List<AddressVo> addressListDtoResponse = addressServiceImpl.findAll();
 
         Assert.assertNull(addressListDtoResponse);
     }
 
     @Test
     public void createShouldReturnAddressDtoResponse(){
-        final AddressDtoRequest addressDtoRequest = AddressDataFactory.buildAddressDtoRequest(1L);
-        Mockito.when(addressRepository.save(Mockito.any())).thenReturn(addressMapper.toAddress(addressDtoRequest));
+        final AddressForm addressForm = AddressDataFactory.buildAddressDtoRequest(1L);
+        Mockito.when(addressRepository.save(Mockito.any())).thenReturn(addressMapper.toAddress(addressForm));
 
-        final AddressDtoResponse addressDtoResponse = addressServiceImpl.create(addressDtoRequest);
+        final AddressVo addressVo = addressServiceImpl.create(addressForm);
 
-        Assert.assertEquals(addressDtoRequest.getStreet(), addressDtoResponse.getStreet());
-        Assert.assertEquals(addressDtoRequest.getCity(), addressDtoResponse.getCity());
-        Assert.assertEquals(addressDtoRequest.getCountry(), addressDtoResponse.getCountry());
-        Assert.assertEquals(addressDtoRequest.getState(), addressDtoResponse.getState());
-        Assert.assertEquals(addressDtoRequest.getZipCode(), addressDtoResponse.getZipCode());
+        Assert.assertEquals(addressForm.getStreet(), addressVo.getStreet());
+        Assert.assertEquals(addressForm.getCity(), addressVo.getCity());
+        Assert.assertEquals(addressForm.getCountry(), addressVo.getCountry());
+        Assert.assertEquals(addressForm.getState(), addressVo.getState());
+        Assert.assertEquals(addressForm.getZipCode(), addressVo.getZipCode());
     }
 
     @Test
@@ -84,24 +84,24 @@ public class AddressServiceTest {
         final Optional<Address> optionalAddress = Optional.of(AddressDataFactory.buildAddress(1L));
         Mockito.when(addressRepository.findById(1L)).thenReturn(optionalAddress);
 
-        final AddressDtoRequest addressDtoRequest = AddressDataFactory.buildAddressDtoRequest(2L);
+        final AddressForm addressForm = AddressDataFactory.buildAddressDtoRequest(2L);
 
-        final AddressDtoResponse addressDtoResponse = addressServiceImpl.update(1L, addressDtoRequest);
+        final AddressVo addressVo = addressServiceImpl.update(1L, addressForm);
 
-        Assert.assertEquals(addressDtoRequest.getStreet(), addressDtoResponse.getStreet());
-        Assert.assertEquals(addressDtoRequest.getCity(), addressDtoResponse.getCity());
-        Assert.assertEquals(addressDtoRequest.getCountry(), addressDtoResponse.getCountry());
-        Assert.assertEquals(addressDtoRequest.getState(), addressDtoResponse.getState());
-        Assert.assertEquals(addressDtoRequest.getZipCode(), addressDtoResponse.getZipCode());
+        Assert.assertEquals(addressForm.getStreet(), addressVo.getStreet());
+        Assert.assertEquals(addressForm.getCity(), addressVo.getCity());
+        Assert.assertEquals(addressForm.getCountry(), addressVo.getCountry());
+        Assert.assertEquals(addressForm.getState(), addressVo.getState());
+        Assert.assertEquals(addressForm.getZipCode(), addressVo.getZipCode());
     }
 
     @Test
     public void updateShouldReturnNull(){
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final AddressDtoResponse addressDtoResponse = addressServiceImpl.update(1L, null);
+        final AddressVo addressVo = addressServiceImpl.update(1L, null);
 
-        Assert.assertNull(addressDtoResponse);
+        Assert.assertNull(addressVo);
     }
 
     @Test
@@ -124,13 +124,13 @@ public class AddressServiceTest {
         final Address address = AddressDataFactory.buildAddress(1L);
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
 
-        final AddressDtoResponse addressDtoResponse = addressServiceImpl.findById(1L);
+        final AddressVo addressVo = addressServiceImpl.findById(1L);
 
-        Assert.assertEquals(address.getStreet(), addressDtoResponse.getStreet());
-        Assert.assertEquals(address.getZipCode(), addressDtoResponse.getZipCode());
-        Assert.assertEquals(address.getState(), addressDtoResponse.getState());
-        Assert.assertEquals(address.getCountry(), addressDtoResponse.getCountry());
-        Assert.assertEquals(address.getCity(), addressDtoResponse.getCity());
+        Assert.assertEquals(address.getStreet(), addressVo.getStreet());
+        Assert.assertEquals(address.getZipCode(), addressVo.getZipCode());
+        Assert.assertEquals(address.getState(), addressVo.getState());
+        Assert.assertEquals(address.getCountry(), addressVo.getCountry());
+        Assert.assertEquals(address.getCity(), addressVo.getCity());
     }
 
     @Test

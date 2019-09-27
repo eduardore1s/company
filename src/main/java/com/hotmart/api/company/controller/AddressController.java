@@ -1,7 +1,7 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.dto.request.AddressDtoRequest;
-import com.hotmart.api.company.model.dto.response.AddressDtoResponse;
+import com.hotmart.api.company.model.form.AddressForm;
+import com.hotmart.api.company.model.vo.AddressVo;
 import com.hotmart.api.company.services.business.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,23 +23,23 @@ public class AddressController {
     @GetMapping
     public ResponseEntity<?> getAddresses(){
 
-        final List<AddressDtoResponse> addressDtoResponseList = addressService.findAll();
+        final List<AddressVo> addressVoList = addressService.findAll();
 
-        if (addressDtoResponseList != null) {
-            return ResponseEntity.ok(addressDtoResponseList);
+        if (addressVoList != null) {
+            return ResponseEntity.ok(addressVoList);
         }
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<AddressDtoResponse> postAddress(@Valid @RequestBody AddressDtoRequest addressDtoRequest,
-                                                  UriComponentsBuilder uriBuilder){
+    public ResponseEntity<AddressVo> postAddress(@Valid @RequestBody AddressForm addressForm,
+                                                 UriComponentsBuilder uriBuilder){
 
-        final AddressDtoResponse addressDtoResponse = addressService.create(addressDtoRequest);
+        final AddressVo addressVo = addressService.create(addressForm);
 
-        if (addressDtoResponse != null){
-            final URI uri = uriBuilder.path("api/v1/address/{id}").buildAndExpand(addressDtoResponse.getId()).toUri();
-            return ResponseEntity.created(uri).body(addressDtoResponse);
+        if (addressVo != null){
+            final URI uri = uriBuilder.path("api/v1/address/{id}").buildAndExpand(addressVo.getId()).toUri();
+            return ResponseEntity.created(uri).body(addressVo);
         }
         return ResponseEntity.unprocessableEntity().build();
     }
@@ -47,29 +47,29 @@ public class AddressController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getAddress(@PathVariable Long id){
 
-        final AddressDtoResponse addressDtoResponse = addressService.findById(id);
+        final AddressVo addressVo = addressService.findById(id);
 
-        if (addressDtoResponse != null) {
-            return ResponseEntity.ok(addressDtoResponse);
+        if (addressVo != null) {
+            return ResponseEntity.ok(addressVo);
         }
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressDtoResponse> putAddress(@PathVariable Long id,
-                                                         @Valid @RequestBody AddressDtoRequest addressDtoRequest){
+    public ResponseEntity<AddressVo> putAddress(@PathVariable Long id,
+                                                @Valid @RequestBody AddressForm addressForm){
 
-        final AddressDtoResponse addressDtoResponse = addressService.update(id, addressDtoRequest);
+        final AddressVo addressVo = addressService.update(id, addressForm);
 
-        if (addressDtoResponse != null){
-            return new ResponseEntity<>(addressDtoResponse, HttpStatus.CREATED);
+        if (addressVo != null){
+            return new ResponseEntity<>(addressVo, HttpStatus.CREATED);
         }
 
         return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AddressDtoResponse> deleteAddress(@PathVariable Long id){
+    public ResponseEntity<AddressVo> deleteAddress(@PathVariable Long id){
 
         if (addressService.delete(id)) {
             return ResponseEntity.noContent().build();

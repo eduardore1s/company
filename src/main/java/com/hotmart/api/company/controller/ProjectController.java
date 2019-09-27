@@ -1,7 +1,7 @@
 package com.hotmart.api.company.controller;
 
-import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
-import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.form.ProjectForm;
+import com.hotmart.api.company.model.vo.ProjectVo;
 import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +23,7 @@ public class ProjectController {
     @GetMapping
     public ResponseEntity<?> getProjects(){
 
-        final List<ProjectDtoResponse> projectsDtoResponseList = projectService.findAll();
+        final List<ProjectVo> projectsDtoResponseList = projectService.findAll();
 
         if (projectsDtoResponseList != null) {
             return ResponseEntity.ok(projectsDtoResponseList);
@@ -32,10 +32,10 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ProjectDtoResponse> postProject(@Valid @RequestBody ProjectDtoRequest projectsDtoRequest,
-                                                                UriComponentsBuilder uriBuilder){
+    public ResponseEntity<ProjectVo> postProject(@Valid @RequestBody ProjectForm projectsDtoRequest,
+                                                 UriComponentsBuilder uriBuilder){
 
-        final ProjectDtoResponse projectsDtoResponse = projectService.create(projectsDtoRequest);
+        final ProjectVo projectsDtoResponse = projectService.create(projectsDtoRequest);
 
         if (projectsDtoResponse != null){
             final URI uri = uriBuilder.path("api/v1/projects/{id}").buildAndExpand(projectsDtoResponse.getId()).toUri();
@@ -47,7 +47,7 @@ public class ProjectController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getProject(@PathVariable Long id){
 
-        final ProjectDtoResponse projectsDtoResponse = projectService.findById(id);
+        final ProjectVo projectsDtoResponse = projectService.findById(id);
 
         if (projectsDtoResponse != null) {
             return ResponseEntity.ok(projectsDtoResponse);
@@ -56,10 +56,10 @@ public class ProjectController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProjectDtoResponse> putProject(@PathVariable Long id,
-                                                               @Valid @RequestBody ProjectDtoRequest projectsDtoRequest){
+    public ResponseEntity<ProjectVo> putProject(@PathVariable Long id,
+                                                @Valid @RequestBody ProjectForm projectsDtoRequest){
 
-        final ProjectDtoResponse projectsDtoResponse = projectService.update(id, projectsDtoRequest);
+        final ProjectVo projectsDtoResponse = projectService.update(id, projectsDtoRequest);
 
         if (projectsDtoResponse != null){
             return new ResponseEntity<>(projectsDtoResponse, HttpStatus.CREATED);
@@ -69,7 +69,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProjectDtoResponse> deleteProject(@PathVariable Long id){
+    public ResponseEntity<ProjectVo> deleteProject(@PathVariable Long id){
 
         if (projectService.delete(id)) {
             return ResponseEntity.noContent().build();

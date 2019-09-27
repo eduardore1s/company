@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.DepartmentDataFactory;
-import com.hotmart.api.company.model.dto.request.DepartmentDtoRequest;
-import com.hotmart.api.company.model.dto.response.DepartmentDtoResponse;
+import com.hotmart.api.company.model.form.DepartmentForm;
+import com.hotmart.api.company.model.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.model.mapper.DepartmentMapperImpl;
@@ -43,7 +43,7 @@ public class DepartmentServiceTest {
         departmentList.add(DepartmentDataFactory.buildDepartment(3L));
         Mockito.when(departmentRepository.findAll()).thenReturn(departmentList);
 
-        final List<DepartmentDtoResponse> departmentListDtoResponse = departmentServiceImpl.findAll();
+        final List<DepartmentVo> departmentListDtoResponse = departmentServiceImpl.findAll();
 
         Assert.assertTrue(departmentListDtoResponse.size() == 3);
         Assert.assertEquals(departmentList.get(0).getName(), departmentListDtoResponse.get(0).getName());
@@ -58,20 +58,20 @@ public class DepartmentServiceTest {
     public void findAllShouldReturnNull(){
         Mockito.when(departmentRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<DepartmentDtoResponse> departmentListDtoResponse = departmentServiceImpl.findAll();
+        final List<DepartmentVo> departmentListDtoResponse = departmentServiceImpl.findAll();
 
         Assert.assertNull(departmentListDtoResponse);
     }
 
     @Test
     public void createShouldReturnDepartmentDtoResponse(){
-        final DepartmentDtoRequest departmentDtoRequest = DepartmentDataFactory.buildDepartmentDtoRequest(1L);
-        Mockito.when(departmentRepository.save(Mockito.any())).thenReturn(departmentMapper.toDepartment(departmentDtoRequest));
+        final DepartmentForm departmentForm = DepartmentDataFactory.buildDepartmentDtoRequest(1L);
+        Mockito.when(departmentRepository.save(Mockito.any())).thenReturn(departmentMapper.toDepartment(departmentForm));
 
-        final DepartmentDtoResponse departmentDtoResponse = departmentServiceImpl.create(departmentDtoRequest);
+        final DepartmentVo departmentVo = departmentServiceImpl.create(departmentForm);
 
-        Assert.assertEquals(departmentDtoRequest.getName(), departmentDtoResponse.getName());
-        Assert.assertEquals(departmentDtoRequest.getNumber(), departmentDtoResponse.getNumber());
+        Assert.assertEquals(departmentForm.getName(), departmentVo.getName());
+        Assert.assertEquals(departmentForm.getNumber(), departmentVo.getNumber());
 //        Assert.assertEquals(departmentDtoRequest.getIdBudgets().get(0), departmentDtoResponse.getBudgets().get(0).getId());
     }
 
@@ -80,21 +80,21 @@ public class DepartmentServiceTest {
         final Optional<Department> optionalDepartment = Optional.of(DepartmentDataFactory.buildDepartment(1L));
         Mockito.when(departmentRepository.findById(1L)).thenReturn(optionalDepartment);
 
-        final DepartmentDtoRequest departmentDtoRequest = DepartmentDataFactory.buildDepartmentDtoRequest(2L);
+        final DepartmentForm departmentForm = DepartmentDataFactory.buildDepartmentDtoRequest(2L);
 
-        final DepartmentDtoResponse departmentDtoResponse = departmentServiceImpl.update(1L, departmentDtoRequest);
+        final DepartmentVo departmentVo = departmentServiceImpl.update(1L, departmentForm);
 
-        Assert.assertEquals(departmentDtoRequest.getName(), departmentDtoResponse.getName());
-        Assert.assertEquals(departmentDtoRequest.getNumber(), departmentDtoResponse.getNumber());
+        Assert.assertEquals(departmentForm.getName(), departmentVo.getName());
+        Assert.assertEquals(departmentForm.getNumber(), departmentVo.getNumber());
     }
 
     @Test
     public void updateShouldReturnNull(){
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final DepartmentDtoResponse departmentDtoResponse = departmentServiceImpl.update(1L, null);
+        final DepartmentVo departmentVo = departmentServiceImpl.update(1L, null);
 
-        Assert.assertNull(departmentDtoResponse);
+        Assert.assertNull(departmentVo);
     }
 
     @Test
@@ -117,10 +117,10 @@ public class DepartmentServiceTest {
         final Department department = DepartmentDataFactory.buildDepartment(1L);
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
 
-        final DepartmentDtoResponse departmentDtoResponse = departmentServiceImpl.findById(1L);
+        final DepartmentVo departmentVo = departmentServiceImpl.findById(1L);
 
-        Assert.assertEquals(department.getName(), departmentDtoResponse.getName());
-        Assert.assertEquals(department.getNumber(), departmentDtoResponse.getNumber());
+        Assert.assertEquals(department.getName(), departmentVo.getName());
+        Assert.assertEquals(department.getNumber(), departmentVo.getNumber());
     }
 
     @Test

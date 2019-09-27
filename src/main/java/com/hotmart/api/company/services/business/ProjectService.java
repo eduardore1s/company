@@ -1,7 +1,7 @@
 package com.hotmart.api.company.services.business;
 
-import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
-import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.form.ProjectForm;
+import com.hotmart.api.company.model.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
@@ -24,7 +24,7 @@ public class ProjectService {
 
     private final DepartmentRepository departmentRepository;
 
-    public List<ProjectDtoResponse> findAll() {
+    public List<ProjectVo> findAll() {
 
         final List<Project>  projectList = projectRepository.findAll();
         if (!projectList.isEmpty()){
@@ -33,25 +33,25 @@ public class ProjectService {
         return null;
     }
 
-    public ProjectDtoResponse create(ProjectDtoRequest projectDtoRequest) {
+    public ProjectVo create(ProjectForm projectForm) {
 
-        final Project project = projectMapper.toProject(projectDtoRequest);
+        final Project project = projectMapper.toProject(projectForm);
 
-        setDepartmentProject(projectDtoRequest, project);
+        setDepartmentProject(projectForm, project);
 
         return projectMapper.toProjectDtoResponse(projectRepository.save(project));
     }
 
-    public ProjectDtoResponse update(Long id, ProjectDtoRequest projectDtoRequest) {
+    public ProjectVo update(Long id, ProjectForm projectForm) {
 
         final Optional<Project> projectOptional = projectRepository.findById(id);
 
         if (projectOptional.isPresent()) {
 
             final Project project = projectOptional.get();
-            projectMapper.updateProject(projectDtoRequest, project);
+            projectMapper.updateProject(projectForm, project);
 
-            setDepartmentProject(projectDtoRequest, project);
+            setDepartmentProject(projectForm, project);
 
             return projectMapper.toProjectDtoResponse(projectRepository.save(project));
         }
@@ -69,7 +69,7 @@ public class ProjectService {
         return false;
     }
 
-    public ProjectDtoResponse findById(Long id) {
+    public ProjectVo findById(Long id) {
 
         final Optional<Project> project = projectRepository.findById(id);
 
@@ -80,7 +80,7 @@ public class ProjectService {
         return null;
     }
 
-    public List<ProjectDtoResponse> findByEmployeeListId(Long idEmployee) {
+    public List<ProjectVo> findByEmployeeListId(Long idEmployee) {
 
         final List<Project>  projectList = projectRepository.findByEmployeeListId(idEmployee);
         if (!projectList.isEmpty()){
@@ -89,9 +89,9 @@ public class ProjectService {
         return null;
     }
 
-    private void setDepartmentProject(ProjectDtoRequest projectDtoRequest, Project project) {
-        if (projectDtoRequest.getIdDepartment() != null){
-            final Optional<Department> departmentProject = departmentRepository.findById(projectDtoRequest.getIdDepartment());
+    private void setDepartmentProject(ProjectForm projectForm, Project project) {
+        if (projectForm.getIdDepartment() != null){
+            final Optional<Department> departmentProject = departmentRepository.findById(projectForm.getIdDepartment());
 
             if (departmentProject.isPresent()){
                 project.setDepartment(departmentProject.get());

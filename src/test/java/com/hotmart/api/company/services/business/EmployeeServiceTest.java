@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.EmployeeDataFactory;
-import com.hotmart.api.company.model.dto.request.EmployeeDtoRequest;
-import com.hotmart.api.company.model.dto.response.EmployeeDtoResponse;
+import com.hotmart.api.company.model.form.EmployeeForm;
+import com.hotmart.api.company.model.vo.EmployeeVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.entity.Employee;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;
@@ -48,7 +48,7 @@ public class EmployeeServiceTest {
         employeeList.add(EmployeeDataFactory.buildEmployee(3L));
         Mockito.when(employeeRepository.findAll()).thenReturn(employeeList);
 
-        final List<EmployeeDtoResponse> employeeListDtoResponse = employeeServiceImpl.findAll();
+        final List<EmployeeVo> employeeListDtoResponse = employeeServiceImpl.findAll();
 
         Assert.assertTrue(employeeListDtoResponse.size() == 3);
         Assert.assertEquals(employeeList.get(0).getName(), employeeListDtoResponse.get(0).getName());
@@ -68,7 +68,7 @@ public class EmployeeServiceTest {
     public void findAllShouldReturnNull(){
         Mockito.when(employeeRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<EmployeeDtoResponse> employeeListDtoResponse = employeeServiceImpl.findAll();
+        final List<EmployeeVo> employeeListDtoResponse = employeeServiceImpl.findAll();
 
         Assert.assertNull(employeeListDtoResponse);
     }
@@ -76,32 +76,32 @@ public class EmployeeServiceTest {
 
     @Test
     public void createShouldReturnEmployeeDtoResponse(){
-        final EmployeeDtoRequest employeeDtoRequest = EmployeeDataFactory.buildEmployeeDtoRequest(1L);
+        final EmployeeForm employeeForm = EmployeeDataFactory.buildEmployeeDtoRequest(1L);
 
         final Address address = new Address();
-        address.setId(employeeDtoRequest.getIdAddress());
+        address.setId(employeeForm.getIdAddress());
         final Optional<Address> addressEmployee = Optional.of(address);
-        Mockito.when(addressRepository.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
+        Mockito.when(addressRepository.findById(employeeForm.getIdAddress())).thenReturn(addressEmployee);
 
         final Employee supervisor = new Employee();
-        supervisor.setId(employeeDtoRequest.getIdSupervisor());
+        supervisor.setId(employeeForm.getIdSupervisor());
         final Optional<Employee> supervisorEmployee = Optional.of(supervisor);
-        Mockito.when(employeeRepository.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
+        Mockito.when(employeeRepository.findById(employeeForm.getIdSupervisor())).thenReturn(supervisorEmployee);
 
-        final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
+        final Employee employee = employeeMapper.toEmployee(employeeForm);
         employee.setAddress(addressEmployee.get());
         employee.setSupervisor(supervisorEmployee.get());
         Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.create(employeeDtoRequest);
+        final EmployeeVo employeeVo = employeeServiceImpl.create(employeeForm);
 
-        Assert.assertEquals(employeeDtoRequest.getName(), employeeDtoResponse.getName());
-        Assert.assertEquals(employeeDtoRequest.getIdAddress(), employeeDtoResponse.getAddress().getId());
-        Assert.assertEquals(employeeDtoRequest.getCpf(), employeeDtoResponse.getCpf());
-        Assert.assertEquals(employeeDtoRequest.getDateOfBirth(), employeeDtoResponse.getDateOfBirth());
-        Assert.assertEquals(employeeDtoRequest.getGender(), employeeDtoResponse.getGender().toString());
-        Assert.assertEquals(employeeDtoRequest.getSalary(), employeeDtoResponse.getSalary());
-        Assert.assertEquals(employeeDtoRequest.getIdSupervisor(), employeeDtoResponse.getSupervisor().getId());
+        Assert.assertEquals(employeeForm.getName(), employeeVo.getName());
+        Assert.assertEquals(employeeForm.getIdAddress(), employeeVo.getAddress().getId());
+        Assert.assertEquals(employeeForm.getCpf(), employeeVo.getCpf());
+        Assert.assertEquals(employeeForm.getDateOfBirth(), employeeVo.getDateOfBirth());
+        Assert.assertEquals(employeeForm.getGender(), employeeVo.getGender().toString());
+        Assert.assertEquals(employeeForm.getSalary(), employeeVo.getSalary());
+        Assert.assertEquals(employeeForm.getIdSupervisor(), employeeVo.getSupervisor().getId());
 //        Assert.assertEquals(employeeDtoRequest.getProjectList(), employeeDtoResponse.getProjectList()); TODO
     }
 
@@ -110,32 +110,32 @@ public class EmployeeServiceTest {
         final Optional<Employee> optionalEmployee = Optional.of(EmployeeDataFactory.buildEmployee(1L));
         Mockito.when(employeeRepository.findById(1L)).thenReturn(optionalEmployee);
 
-        final EmployeeDtoRequest employeeDtoRequest = EmployeeDataFactory.buildEmployeeDtoRequest(2L);
+        final EmployeeForm employeeForm = EmployeeDataFactory.buildEmployeeDtoRequest(2L);
 
         final Address address = new Address();
-        address.setId(employeeDtoRequest.getIdAddress());
+        address.setId(employeeForm.getIdAddress());
         final Optional<Address> addressEmployee = Optional.of(address);
-        Mockito.when(addressRepository.findById(employeeDtoRequest.getIdAddress())).thenReturn(addressEmployee);
+        Mockito.when(addressRepository.findById(employeeForm.getIdAddress())).thenReturn(addressEmployee);
 
         final Employee supervisor = new Employee();
-        supervisor.setId(employeeDtoRequest.getIdSupervisor());
+        supervisor.setId(employeeForm.getIdSupervisor());
         final Optional<Employee> supervisorEmployee = Optional.of(supervisor);
-        Mockito.when(employeeRepository.findById(employeeDtoRequest.getIdSupervisor())).thenReturn(supervisorEmployee);
+        Mockito.when(employeeRepository.findById(employeeForm.getIdSupervisor())).thenReturn(supervisorEmployee);
 
-        final Employee employee = employeeMapper.toEmployee(employeeDtoRequest);
+        final Employee employee = employeeMapper.toEmployee(employeeForm);
         employee.setAddress(addressEmployee.get());
         employee.setSupervisor(supervisorEmployee.get());
         Mockito.when(employeeRepository.save(Mockito.any())).thenReturn(employee);
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.update(1L, employeeDtoRequest);
+        final EmployeeVo employeeVo = employeeServiceImpl.update(1L, employeeForm);
 
-        Assert.assertEquals(employeeDtoRequest.getName(), employeeDtoResponse.getName());
-        Assert.assertEquals(employeeDtoRequest.getIdAddress(), employeeDtoResponse.getAddress().getId());
-        Assert.assertEquals(employeeDtoRequest.getCpf(), employeeDtoResponse.getCpf());
-        Assert.assertEquals(employeeDtoRequest.getDateOfBirth(), employeeDtoResponse.getDateOfBirth());
-        Assert.assertEquals(employeeDtoRequest.getGender(), employeeDtoResponse.getGender().toString());
-        Assert.assertEquals(employeeDtoRequest.getSalary(), employeeDtoResponse.getSalary());
-        Assert.assertEquals(employeeDtoRequest.getIdSupervisor(), employeeDtoResponse.getSupervisor().getId());
+        Assert.assertEquals(employeeForm.getName(), employeeVo.getName());
+        Assert.assertEquals(employeeForm.getIdAddress(), employeeVo.getAddress().getId());
+        Assert.assertEquals(employeeForm.getCpf(), employeeVo.getCpf());
+        Assert.assertEquals(employeeForm.getDateOfBirth(), employeeVo.getDateOfBirth());
+        Assert.assertEquals(employeeForm.getGender(), employeeVo.getGender().toString());
+        Assert.assertEquals(employeeForm.getSalary(), employeeVo.getSalary());
+        Assert.assertEquals(employeeForm.getIdSupervisor(), employeeVo.getSupervisor().getId());
 //        Assert.assertEquals(employeeDtoRequest.getProjectList(), employeeDtoResponse.getProjectList()); TODO
     }
 
@@ -144,9 +144,9 @@ public class EmployeeServiceTest {
     public void updateShouldReturnNull(){
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.update(1L, null);
+        final EmployeeVo employeeVo = employeeServiceImpl.update(1L, null);
 
-        Assert.assertNull(employeeDtoResponse);
+        Assert.assertNull(employeeVo);
     }
 
     @Test
@@ -169,15 +169,15 @@ public class EmployeeServiceTest {
         final Employee employee = EmployeeDataFactory.buildEmployee(1L);
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 
-        final EmployeeDtoResponse employeeDtoResponse = employeeServiceImpl.findById(1L);
+        final EmployeeVo employeeVo = employeeServiceImpl.findById(1L);
 
-        Assert.assertEquals(employee.getName(), employeeDtoResponse.getName());
-        Assert.assertEquals(employee.getAddress().getId(), employeeDtoResponse.getAddress().getId());
-        Assert.assertEquals(employee.getCpf(), employeeDtoResponse.getCpf());
-        Assert.assertEquals(employee.getDateOfBirth(), employeeDtoResponse.getDateOfBirth());
-        Assert.assertEquals(employee.getGender(), employeeDtoResponse.getGender());
-        Assert.assertEquals(employee.getSalary(), employeeDtoResponse.getSalary());
-        Assert.assertEquals(employee.getSupervisor().getId(), employeeDtoResponse.getSupervisor().getId());
+        Assert.assertEquals(employee.getName(), employeeVo.getName());
+        Assert.assertEquals(employee.getAddress().getId(), employeeVo.getAddress().getId());
+        Assert.assertEquals(employee.getCpf(), employeeVo.getCpf());
+        Assert.assertEquals(employee.getDateOfBirth(), employeeVo.getDateOfBirth());
+        Assert.assertEquals(employee.getGender(), employeeVo.getGender());
+        Assert.assertEquals(employee.getSalary(), employeeVo.getSalary());
+        Assert.assertEquals(employee.getSupervisor().getId(), employeeVo.getSupervisor().getId());
 //        Assert.assertEquals(employee.getProjectList(), employeeDtoResponse.getProjectList()); TODO
     }
 

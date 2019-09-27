@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.request;
+package com.hotmart.api.company.model.form;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EmployeeDtoRequest {
+public class EmployeeForm {
 
     @NotNull
     private String name;

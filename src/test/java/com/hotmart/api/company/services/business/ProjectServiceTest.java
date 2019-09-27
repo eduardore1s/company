@@ -1,8 +1,8 @@
 package com.hotmart.api.company.services.business;
 
 import com.hotmart.api.company.data.ProjectDataFactory;
-import com.hotmart.api.company.model.dto.request.ProjectDtoRequest;
-import com.hotmart.api.company.model.dto.response.ProjectDtoResponse;
+import com.hotmart.api.company.model.form.ProjectForm;
+import com.hotmart.api.company.model.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
@@ -48,7 +48,7 @@ public class ProjectServiceTest {
         projectList.add(ProjectDataFactory.buildProject(3L));
         Mockito.when(projectRepository.findAll()).thenReturn(projectList);
 
-        final List<ProjectDtoResponse> employeeListDtoResponse = projectServiceImpl.findAll();
+        final List<ProjectVo> employeeListDtoResponse = projectServiceImpl.findAll();
 
         Assert.assertTrue(employeeListDtoResponse.size() == 3);
         Assert.assertEquals(projectList.get(0).getId(), employeeListDtoResponse.get(0).getId());
@@ -67,32 +67,32 @@ public class ProjectServiceTest {
     public void findAllShouldReturnNull(){
         Mockito.when(projectRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<ProjectDtoResponse> projectListDtoResponse = projectServiceImpl.findAll();
+        final List<ProjectVo> projectListDtoResponse = projectServiceImpl.findAll();
 
         Assert.assertNull(projectListDtoResponse);
     }
 
     @Test
     public void createShouldReturnProjectDtoResponse(){
-        final ProjectDtoRequest projectDtoRequest = ProjectDataFactory.buildProjectDtoRequest(1L);
+        final ProjectForm projectForm = ProjectDataFactory.buildProjectDtoRequest(1L);
 
         final Department department = new Department();
-        department.setId(projectDtoRequest.getIdDepartment());
+        department.setId(projectForm.getIdDepartment());
         final Optional<Department> departmentProject = Optional.of(department);
-        Mockito.when(departmentRepository.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
+        Mockito.when(departmentRepository.findById(projectForm.getIdDepartment())).thenReturn(departmentProject);
 
-        final Project project = projectMapper.toProject(projectDtoRequest);
+        final Project project = projectMapper.toProject(projectForm);
         project.setDepartment(departmentProject.get());
         Mockito.when(projectRepository.save(Mockito.any())).thenReturn(project);
 
-        final ProjectDtoResponse projectDtoResponse = projectServiceImpl.create(projectDtoRequest);
+        final ProjectVo projectVo = projectServiceImpl.create(projectForm);
 
-        Assert.assertEquals(project.getId(), projectDtoResponse.getId());
-        Assert.assertEquals(project.getName(), projectDtoResponse.getName());
-        Assert.assertEquals(project.getDepartment().getId(), projectDtoResponse.getDepartment().getId());
-        Assert.assertEquals(project.getDateStart(), projectDtoResponse.getDateStart());
-        Assert.assertEquals(project.getDateFinal(), projectDtoResponse.getDateFinal());
-        Assert.assertEquals(project.getValue(), projectDtoResponse.getValue());
+        Assert.assertEquals(project.getId(), projectVo.getId());
+        Assert.assertEquals(project.getName(), projectVo.getName());
+        Assert.assertEquals(project.getDepartment().getId(), projectVo.getDepartment().getId());
+        Assert.assertEquals(project.getDateStart(), projectVo.getDateStart());
+        Assert.assertEquals(project.getDateFinal(), projectVo.getDateFinal());
+        Assert.assertEquals(project.getValue(), projectVo.getValue());
 //        Assert.assertEquals(project.getEmployeeList().get(0).getId(), projectDtoResponse.getEmployeeList().get(0).getId()); TODO
     }
 
@@ -101,25 +101,25 @@ public class ProjectServiceTest {
         final Optional<Project> optionalProject = Optional.of(ProjectDataFactory.buildProject(1L));
         Mockito.when(projectRepository.findById(1L)).thenReturn(optionalProject);
 
-        final ProjectDtoRequest projectDtoRequest = ProjectDataFactory.buildProjectDtoRequest(2L);
+        final ProjectForm projectForm = ProjectDataFactory.buildProjectDtoRequest(2L);
 
         final Department department = new Department();
-        department.setId(projectDtoRequest.getIdDepartment());
+        department.setId(projectForm.getIdDepartment());
         final Optional<Department> departmentProject = Optional.of(department);
-        Mockito.when(departmentRepository.findById(projectDtoRequest.getIdDepartment())).thenReturn(departmentProject);
+        Mockito.when(departmentRepository.findById(projectForm.getIdDepartment())).thenReturn(departmentProject);
 
-        final Project project = projectMapper.toProject(projectDtoRequest);
+        final Project project = projectMapper.toProject(projectForm);
         project.setDepartment(departmentProject.get());
         Mockito.when(projectRepository.save(Mockito.any())).thenReturn(project);
 
-        final ProjectDtoResponse projectDtoResponse = projectServiceImpl.update(1L, projectDtoRequest);
+        final ProjectVo projectVo = projectServiceImpl.update(1L, projectForm);
 
-        Assert.assertEquals(project.getId(), projectDtoResponse.getId());
-        Assert.assertEquals(project.getName(), projectDtoResponse.getName());
-        Assert.assertEquals(project.getDepartment().getId(), projectDtoResponse.getDepartment().getId());
-        Assert.assertEquals(project.getDateStart(), projectDtoResponse.getDateStart());
-        Assert.assertEquals(project.getDateFinal(), projectDtoResponse.getDateFinal());
-        Assert.assertEquals(project.getValue(), projectDtoResponse.getValue());
+        Assert.assertEquals(project.getId(), projectVo.getId());
+        Assert.assertEquals(project.getName(), projectVo.getName());
+        Assert.assertEquals(project.getDepartment().getId(), projectVo.getDepartment().getId());
+        Assert.assertEquals(project.getDateStart(), projectVo.getDateStart());
+        Assert.assertEquals(project.getDateFinal(), projectVo.getDateFinal());
+        Assert.assertEquals(project.getValue(), projectVo.getValue());
 //        Assert.assertEquals(project.getEmployeeList().get(0).getId(), projectDtoResponse.getEmployeeList().get(0).getId()); TODO
     }
 
@@ -127,9 +127,9 @@ public class ProjectServiceTest {
     public void updateShouldReturnNull(){
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final ProjectDtoResponse projectDtoResponse = projectServiceImpl.update(1L, null);
+        final ProjectVo projectVo = projectServiceImpl.update(1L, null);
 
-        Assert.assertNull(projectDtoResponse);
+        Assert.assertNull(projectVo);
     }
 
 
@@ -153,15 +153,15 @@ public class ProjectServiceTest {
         final Project project = ProjectDataFactory.buildProject(1L);
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
-        final ProjectDtoResponse projectDtoResponse = projectServiceImpl.findById(1L);
+        final ProjectVo projectVo = projectServiceImpl.findById(1L);
 
-        Assert.assertEquals(project.getId(), projectDtoResponse.getId());
-        Assert.assertEquals(project.getName(), projectDtoResponse.getName());
-        Assert.assertEquals(project.getDepartment().getId(), projectDtoResponse.getDepartment().getId());
-        Assert.assertEquals(project.getDateStart(), projectDtoResponse.getDateStart());
-        Assert.assertEquals(project.getDateFinal(), projectDtoResponse.getDateFinal());
-        Assert.assertEquals(project.getValue(), projectDtoResponse.getValue());
-        Assert.assertEquals(project.getEmployeeList().get(0).getId(), projectDtoResponse.getEmployeeList().get(0).getId());
+        Assert.assertEquals(project.getId(), projectVo.getId());
+        Assert.assertEquals(project.getName(), projectVo.getName());
+        Assert.assertEquals(project.getDepartment().getId(), projectVo.getDepartment().getId());
+        Assert.assertEquals(project.getDateStart(), projectVo.getDateStart());
+        Assert.assertEquals(project.getDateFinal(), projectVo.getDateFinal());
+        Assert.assertEquals(project.getValue(), projectVo.getValue());
+        Assert.assertEquals(project.getEmployeeList().get(0).getId(), projectVo.getEmployeeList().get(0).getId());
 
     }
 

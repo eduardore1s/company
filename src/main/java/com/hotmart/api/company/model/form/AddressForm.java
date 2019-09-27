@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.request;
+package com.hotmart.api.company.model.form;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddressDtoRequest {
+public class AddressForm {
 
     @NotNull
     private String country;

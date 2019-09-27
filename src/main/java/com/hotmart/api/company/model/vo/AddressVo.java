@@ -1,4 +1,4 @@
-package com.hotmart.api.company.model.dto.response;
+package com.hotmart.api.company.model.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AddressDtoResponse {
+public class AddressVo {
 
     private Long id;
 
