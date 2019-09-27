@@ -38,9 +38,7 @@ public class AddressService {
         if (address != null){
             return addressMapper.toAddressVo(address);
         }
-
-        throw new GenericErrorException("id", "Ocorreu um erro ao processar a criação deste recurso.");
-
+        throw new GenericErrorException(null, "Ocorreu um erro ao processar a criação deste recurso.");
     }
 
     public AddressVo update(Long id, AddressForm addressForm) throws ResourceNotFoundException {
@@ -52,19 +50,16 @@ public class AddressService {
             addressRepository.save(address);
             return addressMapper.toAddressVo(address);
         }
-
         throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
     }
 
-    public boolean delete(Long id) throws ResourceNotFoundException{
+    public void delete(Long id) throws ResourceNotFoundException{
         final Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if (addressOptional.isPresent()){
-            addressRepository.delete(addressOptional.get());
-            return true;
+        if (!addressOptional.isPresent()){
+            throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
         }
-
-        throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
+        addressRepository.delete(addressOptional.get());
     }
 
     public AddressVo findById(Long id) throws ResourceNotFoundException{
@@ -74,7 +69,6 @@ public class AddressService {
         if (address.isPresent()){
             return addressMapper.toAddressVo(address.get());
         }
-
         throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
     }
 

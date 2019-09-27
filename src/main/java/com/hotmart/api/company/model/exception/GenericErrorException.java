@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GenericErrorException extends Exception {
+public class GenericErrorException extends RuntimeException {
 
     private String field;
     private String message;

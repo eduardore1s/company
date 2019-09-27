@@ -2,8 +2,6 @@ package com.hotmart.api.company.controller;
 
 import com.hotmart.api.company.controller.form.AddressForm;
 import com.hotmart.api.company.controller.vo.AddressVo;
-import com.hotmart.api.company.model.exception.GenericErrorException;
-import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.services.business.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,25 +26,25 @@ public class AddressController {
 
     @PostMapping
     public ResponseEntity<AddressVo> postAddress(@Valid @RequestBody AddressForm addressForm,
-                                                 UriComponentsBuilder uriBuilder) throws GenericErrorException {
+                                                 UriComponentsBuilder uriBuilder) {
         final AddressVo addressVo = addressService.create(addressForm);
         final URI uri = uriBuilder.path("api/v1/address/{id}").buildAndExpand(addressVo.getId()).toUri();
         return ResponseEntity.created(uri).body(addressVo);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getAddress(@PathVariable Long id) throws ResourceNotFoundException{
+    public ResponseEntity<?> getAddress(@PathVariable Long id) {
         return ResponseEntity.ok(addressService.findById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressVo> putAddress(@PathVariable Long id, @Valid @RequestBody AddressForm addressForm) throws ResourceNotFoundException {
+    public ResponseEntity<AddressVo> putAddress(@PathVariable Long id, @Valid @RequestBody AddressForm addressForm) {
         final AddressVo addressVo = addressService.update(id, addressForm);
         return new ResponseEntity<>(addressVo, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<AddressVo> deleteAddress(@PathVariable Long id) throws ResourceNotFoundException{
+    public ResponseEntity<AddressVo> deleteAddress(@PathVariable Long id) {
         addressService.delete(id);
         return ResponseEntity.noContent().build();
     }

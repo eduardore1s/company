@@ -3,11 +3,14 @@ package com.hotmart.api.company.services.business;
 import com.hotmart.api.company.controller.form.DepartmentForm;
 import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
+import com.hotmart.api.company.model.exception.GenericErrorException;
+import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.repository.DepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,15 +29,20 @@ public class DepartmentService {
         if (!departmentList.isEmpty()){
             return departmentList.stream().map(departmentMapper::toDepartmentVo).collect(Collectors.toList());
         }
-        return null;
+        return new ArrayList<>();
     }
 
-    public DepartmentVo create(DepartmentForm departmentForm) {
+    public DepartmentVo create(DepartmentForm departmentForm) throws GenericErrorException {
         final Department department = departmentRepository.save(departmentMapper.toDepartment(departmentForm));
-        return departmentMapper.toDepartmentVo(department);
+
+        if (department != null) {
+            return departmentMapper.toDepartmentVo(department);
+        }
+
+        throw new GenericErrorException(null, "Ocorreu um erro ao processar a criação deste recurso.");
     }
 
-    public DepartmentVo update(Long id, DepartmentForm departmentForm) {
+    public DepartmentVo update(Long id, DepartmentForm departmentForm) throws ResourceNotFoundException {
         final Optional<Department> departmentOptional = departmentRepository.findById(id);
 
         if (departmentOptional.isPresent()){
@@ -44,29 +52,25 @@ public class DepartmentService {
 
             return departmentMapper.toDepartmentVo(department);
         }
-
-        return null;
+        throw new ResourceNotFoundException("id", "Nao existe Department para este id.");
     }
 
-    public boolean delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException {
         final Optional<Department> departmentOptional = departmentRepository.findById(id);
 
-        if (departmentOptional.isPresent()){
-            departmentRepository.delete(departmentOptional.get());
-            return true;
+        if (!departmentOptional.isPresent()){
+            throw new ResourceNotFoundException("id", "Nao existe Department para este id.");
         }
-
-        return false;
+        departmentRepository.delete(departmentOptional.get());
     }
 
-    public DepartmentVo findById(Long id) {
+    public DepartmentVo findById(Long id) throws ResourceNotFoundException {
 
         final Optional<Department> department = departmentRepository.findById(id);
 
         if (department.isPresent()){
             return departmentMapper.toDepartmentVo(department.get());
         }
-
-        return null;
+        throw new ResourceNotFoundException("id", "Nao existe Department para este id.");
     }
 }

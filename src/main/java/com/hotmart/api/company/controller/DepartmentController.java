@@ -2,7 +2,6 @@ package com.hotmart.api.company.controller;
 
 import com.hotmart.api.company.controller.form.DepartmentForm;
 import com.hotmart.api.company.controller.vo.DepartmentVo;
-import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.services.business.DepartmentService;
 import com.hotmart.api.company.services.business.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/departments")
@@ -27,70 +25,38 @@ public class DepartmentController {
 
     @GetMapping
     public ResponseEntity<?> getDepartments(){
-
-        final List<DepartmentVo> departmentVoList = departmentService.findAll();
-
-        if (departmentVoList != null) {
-            return ResponseEntity.ok(departmentVoList);
-        }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(departmentService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<DepartmentVo> postDepartment(@Valid @RequestBody DepartmentForm departmentForm,
-                                                       UriComponentsBuilder uriBuilder){
-
+                                                       UriComponentsBuilder uriBuilder) {
         final DepartmentVo departmentVo = departmentService.create(departmentForm);
-
-        if (departmentVo != null){
-            final URI uri = uriBuilder.path("api/v1/department/{id}").buildAndExpand(departmentVo.getId()).toUri();
-            return ResponseEntity.created(uri).body(departmentVo);
-        }
-        return ResponseEntity.unprocessableEntity().build();
+        final URI uri = uriBuilder.path("api/v1/department/{id}").buildAndExpand(departmentVo.getId()).toUri();
+        return ResponseEntity.created(uri).body(departmentVo);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getDepartment(@PathVariable Long id){
-
-        final DepartmentVo departmentVo = departmentService.findById(id);
-
-        if (departmentVo != null) {
-            return ResponseEntity.ok(departmentVo);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getDepartment(@PathVariable Long id) {
+        return ResponseEntity.ok(departmentService.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<DepartmentVo> putDepartment(@PathVariable Long id,
-                                                      @Valid @RequestBody DepartmentForm departmentForm){
-
+                                                      @Valid @RequestBody DepartmentForm departmentForm) {
         final DepartmentVo departmentVo = departmentService.update(id, departmentForm);
-
-        if (departmentVo != null){
-            return new ResponseEntity<>(departmentVo, HttpStatus.CREATED);
-        }
-
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(departmentVo, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<DepartmentVo> deleteDepartment(@PathVariable Long id){
-
-        if (departmentService.delete(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<DepartmentVo> deleteDepartment(@PathVariable Long id) {
+        departmentService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("{id}/employees")
     public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long id){
-
-        final List<EmployeeVo> employeeVoList = employeeService.findByProjectListDepartmentId(id);
-
-        if (employeeVoList != null) {
-            return ResponseEntity.ok(employeeVoList);
-        }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(employeeService.findByProjectListDepartmentId(id));
     }
 
 }

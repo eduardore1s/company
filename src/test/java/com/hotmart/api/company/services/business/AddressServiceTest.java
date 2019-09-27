@@ -105,19 +105,11 @@ public class AddressServiceTest {
         addressService.update(1L, null);
     }
 
-    @Test
-    public void deleteShouldReturnTrue() throws ResourceNotFoundException {
-        Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.of(new Address()));
-
-        Assert.assertTrue(addressService.delete(1L));
-    }
-
-
     @Test(expected = ResourceNotFoundException.class)
     public void deleteShouldReturnResourceNotFoundException() throws ResourceNotFoundException {
         Mockito.when(addressRepository.findById(1L)).thenReturn(Optional.empty());
 
-       addressService.delete(1L);
+        addressService.delete(1L);
     }
 
     @Test

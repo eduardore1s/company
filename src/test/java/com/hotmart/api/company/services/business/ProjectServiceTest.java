@@ -5,6 +5,8 @@ import com.hotmart.api.company.controller.form.ProjectForm;
 import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
+import com.hotmart.api.company.model.exception.GenericErrorException;
+import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
 import com.hotmart.api.company.model.mapper.ProjectMapperImpl;
 import com.hotmart.api.company.repository.DepartmentRepository;
@@ -64,16 +66,17 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void findAllShouldReturnNull(){
+    public void findAllShouldReturnListEmpty(){
         Mockito.when(projectRepository.findAll()).thenReturn(new ArrayList<>());
 
         final List<ProjectVo> projectListDtoResponse = projectServiceImpl.findAll();
 
-        Assert.assertNull(projectListDtoResponse);
+        Assert.assertNotNull(projectListDtoResponse);
+        Assert.assertTrue(projectListDtoResponse.isEmpty());
     }
 
     @Test
-    public void createShouldReturnProjectDtoResponse(){
+    public void createShouldReturnProjectDtoResponse() throws GenericErrorException {
         final ProjectForm projectForm = ProjectDataFactory.buildProjectDtoRequest(1L);
 
         final Department department = new Department();
@@ -97,7 +100,7 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void updateShouldReturnEmployeeDtoResponse(){
+    public void updateShouldReturnEmployeeDtoResponse() throws ResourceNotFoundException {
         final Optional<Project> optionalProject = Optional.of(ProjectDataFactory.buildProject(1L));
         Mockito.when(projectRepository.findById(1L)).thenReturn(optionalProject);
 
@@ -123,33 +126,22 @@ public class ProjectServiceTest {
 //        Assert.assertEquals(project.getEmployeeList().get(0).getId(), projectDtoResponse.getEmployeeList().get(0).getId()); TODO
     }
 
-    @Test
-    public void updateShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final ProjectVo projectVo = projectServiceImpl.update(1L, null);
-
-        Assert.assertNull(projectVo);
+        projectServiceImpl.update(1L, null);
     }
 
-
-    @Test
-    public void deleteShouldReturnTrue(){
-        Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(new Project()));
-
-        Assert.assertTrue(projectServiceImpl.delete(1L));
-    }
-
-
-    @Test
-    public void deleteShouldReturnFalse(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteShouldReturnFalse() throws ResourceNotFoundException {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertFalse(projectServiceImpl.delete(1L));
+        projectServiceImpl.delete(1L);
     }
 
     @Test
-    public void findByIdShouldReturnProjectDtoResponse(){
+    public void findByIdShouldReturnProjectDtoResponse() throws ResourceNotFoundException {
         final Project project = ProjectDataFactory.buildProject(1L);
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.of(project));
 
@@ -165,11 +157,11 @@ public class ProjectServiceTest {
 
     }
 
-    @Test
-    public void findByIdShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void findByIdShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(projectRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertNull(projectServiceImpl.findById(1L));
+        projectServiceImpl.findById(1L);
     }
 
 

@@ -11,7 +11,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -22,58 +21,34 @@ public class ProjectController {
 
     @GetMapping
     public ResponseEntity<?> getProjects(){
-
-        final List<ProjectVo> projectsDtoResponseList = projectService.findAll();
-
-        if (projectsDtoResponseList != null) {
-            return ResponseEntity.ok(projectsDtoResponseList);
-        }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(projectService.findAll());
     }
 
     @PostMapping
     public ResponseEntity<ProjectVo> postProject(@Valid @RequestBody ProjectForm projectsDtoRequest,
-                                                 UriComponentsBuilder uriBuilder){
+                                                 UriComponentsBuilder uriBuilder) {
 
         final ProjectVo projectsDtoResponse = projectService.create(projectsDtoRequest);
-
-        if (projectsDtoResponse != null){
-            final URI uri = uriBuilder.path("api/v1/projects/{id}").buildAndExpand(projectsDtoResponse.getId()).toUri();
-            return ResponseEntity.created(uri).body(projectsDtoResponse);
-        }
-        return ResponseEntity.unprocessableEntity().build();
+        final URI uri = uriBuilder.path("api/v1/projects/{id}").buildAndExpand(projectsDtoResponse.getId()).toUri();
+        return ResponseEntity.created(uri).body(projectsDtoResponse);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getProject(@PathVariable Long id){
-
-        final ProjectVo projectsDtoResponse = projectService.findById(id);
-
-        if (projectsDtoResponse != null) {
-            return ResponseEntity.ok(projectsDtoResponse);
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getProject(@PathVariable Long id) {
+        return ResponseEntity.ok(projectService.findById(id));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProjectVo> putProject(@PathVariable Long id,
-                                                @Valid @RequestBody ProjectForm projectsDtoRequest){
+                                                @Valid @RequestBody ProjectForm projectsDtoRequest) {
 
         final ProjectVo projectsDtoResponse = projectService.update(id, projectsDtoRequest);
-
-        if (projectsDtoResponse != null){
-            return new ResponseEntity<>(projectsDtoResponse, HttpStatus.CREATED);
-        }
-
-        return ResponseEntity.notFound().build();
+        return new ResponseEntity<>(projectsDtoResponse, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ProjectVo> deleteProject(@PathVariable Long id){
-
-        if (projectService.delete(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<ProjectVo> deleteProject(@PathVariable Long id) {
+        projectService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

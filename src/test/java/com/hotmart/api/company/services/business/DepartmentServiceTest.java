@@ -4,6 +4,8 @@ import com.hotmart.api.company.data.DepartmentDataFactory;
 import com.hotmart.api.company.controller.form.DepartmentForm;
 import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
+import com.hotmart.api.company.model.exception.GenericErrorException;
+import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.model.mapper.DepartmentMapperImpl;
 import com.hotmart.api.company.repository.DepartmentRepository;
@@ -22,7 +24,7 @@ import java.util.Optional;
 @RunWith(MockitoJUnitRunner.class)
 public class DepartmentServiceTest {
 
-    private DepartmentService departmentServiceImpl;
+    private DepartmentService departmentService;
 
     private DepartmentMapper departmentMapper;
 
@@ -32,7 +34,7 @@ public class DepartmentServiceTest {
     @Before
     public void init(){
         departmentMapper = new DepartmentMapperImpl();
-        departmentServiceImpl = new DepartmentService(departmentMapper, departmentRepository);
+        departmentService = new DepartmentService(departmentMapper, departmentRepository);
     }
 
     @Test
@@ -43,7 +45,7 @@ public class DepartmentServiceTest {
         departmentList.add(DepartmentDataFactory.buildDepartment(3L));
         Mockito.when(departmentRepository.findAll()).thenReturn(departmentList);
 
-        final List<DepartmentVo> departmentListDtoResponse = departmentServiceImpl.findAll();
+        final List<DepartmentVo> departmentListDtoResponse = departmentService.findAll();
 
         Assert.assertTrue(departmentListDtoResponse.size() == 3);
         Assert.assertEquals(departmentList.get(0).getName(), departmentListDtoResponse.get(0).getName());
@@ -55,20 +57,21 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void findAllShouldReturnNull(){
+    public void findAllShouldReturnListEmpty(){
         Mockito.when(departmentRepository.findAll()).thenReturn(new ArrayList<>());
 
-        final List<DepartmentVo> departmentListDtoResponse = departmentServiceImpl.findAll();
+        final List<DepartmentVo> departmentListDtoResponse = departmentService.findAll();
 
-        Assert.assertNull(departmentListDtoResponse);
+        Assert.assertNotNull(departmentListDtoResponse);
+        Assert.assertTrue(departmentListDtoResponse.isEmpty());
     }
 
     @Test
-    public void createShouldReturnDepartmentDtoResponse(){
+    public void createShouldReturnDepartmentDtoResponse() throws GenericErrorException {
         final DepartmentForm departmentForm = DepartmentDataFactory.buildDepartmentDtoRequest(1L);
         Mockito.when(departmentRepository.save(Mockito.any())).thenReturn(departmentMapper.toDepartment(departmentForm));
 
-        final DepartmentVo departmentVo = departmentServiceImpl.create(departmentForm);
+        final DepartmentVo departmentVo = departmentService.create(departmentForm);
 
         Assert.assertEquals(departmentForm.getName(), departmentVo.getName());
         Assert.assertEquals(departmentForm.getNumber(), departmentVo.getNumber());
@@ -76,58 +79,49 @@ public class DepartmentServiceTest {
     }
 
     @Test
-    public void updateShouldReturnDepartmentDtoResponse(){
+    public void updateShouldReturnDepartmentDtoResponse() throws ResourceNotFoundException {
         final Optional<Department> optionalDepartment = Optional.of(DepartmentDataFactory.buildDepartment(1L));
         Mockito.when(departmentRepository.findById(1L)).thenReturn(optionalDepartment);
 
         final DepartmentForm departmentForm = DepartmentDataFactory.buildDepartmentDtoRequest(2L);
 
-        final DepartmentVo departmentVo = departmentServiceImpl.update(1L, departmentForm);
+        final DepartmentVo departmentVo = departmentService.update(1L, departmentForm);
 
         Assert.assertEquals(departmentForm.getName(), departmentVo.getName());
         Assert.assertEquals(departmentForm.getNumber(), departmentVo.getNumber());
     }
 
-    @Test
-    public void updateShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateShouldReturnNotFoundException() throws ResourceNotFoundException {
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final DepartmentVo departmentVo = departmentServiceImpl.update(1L, null);
-
-        Assert.assertNull(departmentVo);
-    }
-
-    @Test
-    public void deleteShouldReturnTrue(){
-        Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.of(new Department()));
-
-        Assert.assertTrue(departmentServiceImpl.delete(1L));
+        departmentService.update(1L, null);
     }
 
 
-    @Test
-    public void deleteShouldReturnFalse(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteShouldReturnNotFoundException() throws ResourceNotFoundException {
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertFalse(departmentServiceImpl.delete(1L));
+        departmentService.delete(1L);
     }
 
     @Test
-    public void findByIdShouldReturnDepartmentDtoResponse(){
+    public void findByIdShouldReturnDepartmentDtoResponse() throws ResourceNotFoundException {
         final Department department = DepartmentDataFactory.buildDepartment(1L);
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.of(department));
 
-        final DepartmentVo departmentVo = departmentServiceImpl.findById(1L);
+        final DepartmentVo departmentVo = departmentService.findById(1L);
 
         Assert.assertEquals(department.getName(), departmentVo.getName());
         Assert.assertEquals(department.getNumber(), departmentVo.getNumber());
     }
 
-    @Test
-    public void findByIdShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void findByIdShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(departmentRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertNull(departmentServiceImpl.findById(1L));
+        departmentService.findById(1L);
     }
 
 }

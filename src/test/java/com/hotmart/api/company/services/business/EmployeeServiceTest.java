@@ -5,6 +5,8 @@ import com.hotmart.api.company.controller.form.EmployeeForm;
 import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.model.entity.Address;
 import com.hotmart.api.company.model.entity.Employee;
+import com.hotmart.api.company.model.exception.GenericErrorException;
+import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.EmployeeMapper;
 import com.hotmart.api.company.model.mapper.EmployeeMapperImpl;
 import com.hotmart.api.company.repository.AddressRepository;
@@ -65,17 +67,18 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void findAllShouldReturnNull(){
+    public void findAllShouldReturnListEmpty(){
         Mockito.when(employeeRepository.findAll()).thenReturn(new ArrayList<>());
 
         final List<EmployeeVo> employeeListDtoResponse = employeeServiceImpl.findAll();
 
-        Assert.assertNull(employeeListDtoResponse);
+        Assert.assertNotNull(employeeListDtoResponse);
+        Assert.assertTrue(employeeListDtoResponse.isEmpty());
     }
 
 
     @Test
-    public void createShouldReturnEmployeeDtoResponse(){
+    public void createShouldReturnEmployeeDtoResponse() throws GenericErrorException {
         final EmployeeForm employeeForm = EmployeeDataFactory.buildEmployeeDtoRequest(1L);
 
         final Address address = new Address();
@@ -106,7 +109,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void updateShouldReturnEmployeeDtoResponse(){
+    public void updateShouldReturnEmployeeDtoResponse() throws ResourceNotFoundException {
         final Optional<Employee> optionalEmployee = Optional.of(EmployeeDataFactory.buildEmployee(1L));
         Mockito.when(employeeRepository.findById(1L)).thenReturn(optionalEmployee);
 
@@ -140,32 +143,22 @@ public class EmployeeServiceTest {
     }
 
 
-    @Test
-    public void updateShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void updateShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        final EmployeeVo employeeVo = employeeServiceImpl.update(1L, null);
-
-        Assert.assertNull(employeeVo);
+        employeeServiceImpl.update(1L, null);
     }
 
-    @Test
-    public void deleteShouldReturnTrue(){
-        Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.of(new Employee()));
-
-        Assert.assertTrue(employeeServiceImpl.delete(1L));
-    }
-
-
-    @Test
-    public void deleteShouldReturnFalse(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void deleteShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertFalse(employeeServiceImpl.delete(1L));
+        employeeServiceImpl.delete(1L);
     }
 
     @Test
-    public void findByIdShouldReturnEmployeeDtoResponse(){
+    public void findByIdShouldReturnEmployeeDtoResponse() throws ResourceNotFoundException {
         final Employee employee = EmployeeDataFactory.buildEmployee(1L);
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.of(employee));
 
@@ -181,11 +174,11 @@ public class EmployeeServiceTest {
 //        Assert.assertEquals(employee.getProjectList(), employeeDtoResponse.getProjectList()); TODO
     }
 
-    @Test
-    public void findByIdShouldReturnNull(){
+    @Test(expected = ResourceNotFoundException.class)
+    public void findByIdShouldReturnResourceNotFound() throws ResourceNotFoundException {
         Mockito.when(employeeRepository.findById(1L)).thenReturn(Optional.empty());
 
-        Assert.assertNull(employeeServiceImpl.findById(1L));
+        employeeServiceImpl.findById(1L);
     }
 
 
