@@ -1,25 +1,16 @@
-package com.hotmart.api.company.model.entity;
+package com.hotmart.api.company.controller.form;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
-public class Budget {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BudgetForm {
 
     private BigDecimal value;
 
@@ -28,5 +19,4 @@ public class Budget {
     private LocalDate dateFinal;
 
     private LocalDate createdDate;
-
 }

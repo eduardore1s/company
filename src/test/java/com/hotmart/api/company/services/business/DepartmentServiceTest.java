@@ -6,9 +6,12 @@ import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.exception.GenericErrorException;
 import com.hotmart.api.company.model.exception.ResourceNotFoundException;
+import com.hotmart.api.company.model.mapper.BudgetMapper;
 import com.hotmart.api.company.model.mapper.DepartmentMapper;
 import com.hotmart.api.company.model.mapper.DepartmentMapperImpl;
+import com.hotmart.api.company.repository.BudgetRepository;
 import com.hotmart.api.company.repository.DepartmentRepository;
+import com.hotmart.api.company.repository.ProjectRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,13 +31,21 @@ public class DepartmentServiceTest {
 
     private DepartmentMapper departmentMapper;
 
+    private BudgetMapper budgetMapper;
+
     @Mock
     private DepartmentRepository departmentRepository;
+
+    @Mock
+    private BudgetRepository budgetRepository;
+
+    @Mock
+    private ProjectRepository projectRepository;
 
     @Before
     public void init(){
         departmentMapper = new DepartmentMapperImpl();
-        departmentService = new DepartmentService(departmentMapper, departmentRepository);
+        departmentService = new DepartmentService(departmentMapper, budgetMapper, departmentRepository, budgetRepository, projectRepository);
     }
 
     @Test

@@ -1,6 +1,8 @@
 package com.hotmart.api.company.controller;
 
+import com.hotmart.api.company.controller.form.BudgetForm;
 import com.hotmart.api.company.controller.form.DepartmentForm;
+import com.hotmart.api.company.controller.vo.BudgetVo;
 import com.hotmart.api.company.controller.vo.DepartmentVo;
 import com.hotmart.api.company.services.business.DepartmentService;
 import com.hotmart.api.company.services.business.EmployeeService;
@@ -57,6 +59,17 @@ public class DepartmentController {
     @GetMapping("{id}/employees")
     public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long id){
         return ResponseEntity.ok(employeeService.findByProjectListDepartmentId(id));
+    }
+
+    @GetMapping("{id}/budgets")
+    public ResponseEntity<?> getBudgetStatusOfDepartment(@PathVariable Long id){
+        return ResponseEntity.ok(departmentService.getStatusBudget());
+    }
+
+    @PostMapping("{id}/budgets")
+    public ResponseEntity<BudgetVo> postBudgetDepartment(@PathVariable Long id, @Valid @RequestBody BudgetForm budgetForm) {
+        final BudgetVo budgetVo = departmentService.createBudget(id, budgetForm);
+        return new ResponseEntity<>(budgetVo, HttpStatus.CREATED);
     }
 
 }
