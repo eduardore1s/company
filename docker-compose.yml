@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: 'company'
+      MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./data:/usr/share/mysql/data
+  company:
+    image: company
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql

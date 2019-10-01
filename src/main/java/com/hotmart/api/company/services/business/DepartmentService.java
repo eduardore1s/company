@@ -170,6 +170,14 @@ public class DepartmentService {
     private BigDecimal calcTotalProjects(Budget budget, List<Project> projects, String typeProject, List<Project> projectsProcessed){
         projects.removeAll(projectsProcessed);
 
+//        BigDecimal totalProjects = projects.stream().map(project -> {
+//            final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
+//            final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
+//
+//            final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
+//            return project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP).multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees);
+//        }).reduce(BigDecimal::add).get();
+
         BigDecimal totalProjects = new BigDecimal(0);
         for (Project project : projects) {
             final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
