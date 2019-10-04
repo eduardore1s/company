@@ -10,12 +10,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     List<Project> findByEmployeeListId(Long id);
 
-    List<Project> findByDateStartAfter(LocalDate date);
+    List<Project> findByDepartmentIdAndDateStartAfter(Long id, LocalDate date);
 
-    List<Project> findByDateStartBetweenAndDateFinalBetween(LocalDate firstDateStart, LocalDate lastDateStart,
-                                                            LocalDate firstDateFinal, LocalDate lastDateFinal);
+    List<Project> findByDepartmentIdAndDateStartBetweenAndDateFinalBetween(Long id, LocalDate firstDateStart, LocalDate lastDateStart,
+                                                                           LocalDate firstDateFinal, LocalDate lastDateFinal);
 
-    List<Project> findByDateFinalBefore(LocalDate date);
+    List<Project> findByDepartmentIdAndDateFinalBefore(Long id, LocalDate date);
 
-    List<Project> findByDateStartBeforeAndDateFinalAfter(LocalDate firstDate, LocalDate lastDate);
+    List<Project> findByDepartmentIdAndDateStartBeforeAndDateFinalAfter(Long id, LocalDate firstDate, LocalDate lastDate);
 }

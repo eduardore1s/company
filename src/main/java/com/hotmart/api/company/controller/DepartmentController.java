@@ -63,7 +63,7 @@ public class DepartmentController {
 
     @GetMapping("{id}/budgets")
     public ResponseEntity<?> getBudgetStatusOfDepartment(@PathVariable Long id) {
-        return ResponseEntity.ok(departmentService.getStatusBudget());
+        return ResponseEntity.ok(departmentService.getStatusBudget(id));
     }
 
     @PostMapping("{id}/budgets")

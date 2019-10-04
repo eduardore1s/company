@@ -121,17 +121,17 @@ public class DepartmentService {
     }
 
 
-    public StatusBudgetVo getStatusBudget() {
+    public StatusBudgetVo getStatusBudget(Long idDepartment) {
 
         final Budget currentBudget = budgetRepository.findFirstByOrderByCreatedDateDesc();
 
         final List<Project> projectsProcessed = new ArrayList<>();
 
         final BigDecimal totalProjectsBudget =
-                calcTotalProjectsThatStartAndThatEndAtBudget(currentBudget, projectsProcessed)
-                        .add(calcTotalProjectsThatEndAtBudget(currentBudget, projectsProcessed))
-                        .add(calcTotalProjectsThatStartAtBudget(currentBudget, projectsProcessed))
-                        .add(calcTotalProjectsThatStartAndEndOffBudget(currentBudget, projectsProcessed));
+                calcTotalProjectsThatStartAndThatEndAtBudget(idDepartment, currentBudget, projectsProcessed)
+                        .add(calcTotalProjectsThatEndAtBudget(idDepartment, currentBudget, projectsProcessed))
+                        .add(calcTotalProjectsThatStartAtBudget(idDepartment, currentBudget, projectsProcessed))
+                        .add(calcTotalProjectsThatStartAndEndOffBudget(idDepartment, currentBudget, projectsProcessed));
 
         return getStatusBudgetVo(currentBudget, totalProjectsBudget);
 
@@ -158,34 +158,53 @@ public class DepartmentService {
                 || totalProjectsBudget.compareTo(currentBudget.getValue().multiply(new BigDecimal(1.1))) == 0;
     }
 
-    private boolean statusIsVermelho(Budget currentBudget, BigDecimal totalProjectsBudget) {
-        return totalProjectsBudget.compareTo(currentBudget.getValue().multiply(new BigDecimal(1.1))) == 1;
-    }
-
-    private BigDecimal calcTotalProjectsThatStartAndThatEndAtBudget(Budget budget, List<Project> projectsProcessed) {
+    private BigDecimal calcTotalProjectsThatStartAndThatEndAtBudget(Long idDepartment, Budget budget, List<Project> projectsProcessed) {
         final List<Project> projectsThatStartAndThatEndAtBudget = projectRepository
-                .findByDateStartBetweenAndDateFinalBetween(budget.getDateStart(), budget.getDateFinal(), budget.getDateStart(), budget.getDateFinal());
+                .findByDepartmentIdAndDateStartBetweenAndDateFinalBetween(idDepartment, budget.getDateStart(), budget.getDateFinal(), budget.getDateStart(), budget.getDateFinal());
         return calcTotalProjects(budget, projectsThatStartAndThatEndAtBudget, PROJECTS_THAT_START_AND_THAT_END_AT_BUDGET, projectsProcessed);
     }
 
-    private BigDecimal calcTotalProjectsThatEndAtBudget(Budget budget, List<Project> projectsProcessed) {
-        final List<Project> projectsThatEndAtBudget = projectRepository.findByDateFinalBefore(budget.getDateFinal());
+    private BigDecimal calcTotalProjectsThatEndAtBudget(Long idDepartment, Budget budget, List<Project> projectsProcessed) {
+        final List<Project> projectsThatEndAtBudget = projectRepository.findByDepartmentIdAndDateFinalBefore(idDepartment, budget.getDateFinal());
         return calcTotalProjects(budget, projectsThatEndAtBudget, PROJECTS_THAT_END_AT_BUDGET, projectsProcessed);
     }
 
-    private BigDecimal calcTotalProjectsThatStartAtBudget(Budget budget, List<Project> projectsProcessed) {
-        final List<Project> projectsThatStartAtBudget = projectRepository.findByDateStartAfter(budget.getDateStart());
+    private BigDecimal calcTotalProjectsThatStartAtBudget(Long idDepartment, Budget budget, List<Project> projectsProcessed) {
+        final List<Project> projectsThatStartAtBudget = projectRepository.findByDepartmentIdAndDateStartAfter(idDepartment, budget.getDateStart());
         return calcTotalProjects(budget, projectsThatStartAtBudget, PROJECTS_THAT_START_AT_BUDGET, projectsProcessed);
     }
 
-    private BigDecimal calcTotalProjectsThatStartAndEndOffBudget(Budget budget, List<Project> projectsProcessed) {
+    private BigDecimal calcTotalProjectsThatStartAndEndOffBudget(Long idDepartment, Budget budget, List<Project> projectsProcessed) {
         final List<Project> projectsThatStartAndEndOffBudget = projectRepository
-                .findByDateStartBeforeAndDateFinalAfter(budget.getDateStart(), budget.getDateFinal());
+                .findByDepartmentIdAndDateStartBeforeAndDateFinalAfter(idDepartment, budget.getDateStart(), budget.getDateFinal());
         return calcTotalProjects(budget, projectsThatStartAndEndOffBudget, PROJECTS_THAT_START_AT_BUDGET, projectsProcessed);
     }
 
     private BigDecimal calcTotalProjects(Budget budget, List<Project> projects, String typeProject, List<Project> projectsProcessed) {
         projects.removeAll(projectsProcessed);
+
+//        final BigDecimal totalProjects = new BigDecimal(0);
+//        projects.forEach(new Consumer<Project>() {
+//            @Override
+//            public void accept(Project project) {
+//                final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
+//                final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
+//
+//                final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
+//                totalProjects.add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
+//                    .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees));
+//            }
+//        });
+
+//        final BigDecimal totalProjects = new BigDecimal(0);
+//        projects.stream().forEach(project -> {
+//            final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
+//            final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
+//
+//            final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
+//            totalProjects.add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
+//                    .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees));
+//        });
 
         BigDecimal totalProjects = new BigDecimal(0);
         for (Project project : projects) {
@@ -218,8 +237,18 @@ public class DepartmentService {
     }
 
     private BigDecimal calcTotalSalaryEmployees(List<Employee> employees, BigDecimal daysOfProjectAtBudget) {
-        BigDecimal totalSalaryEmployees = new BigDecimal(0);
+//        final BigDecimal totalSalaryEmployees = new BigDecimal(0);
 
+//        employees.forEach(employee -> totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget)));
+//
+//        employees.forEach(new Consumer<Employee>() {
+//            @Override
+//            public void accept(Employee employee) {
+//                totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget)));
+//            }
+//        });
+
+        BigDecimal totalSalaryEmployees = new BigDecimal(0);
         for (Employee employee : employees) {
             totalSalaryEmployees =
                     totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget));

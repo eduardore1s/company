@@ -17,19 +17,19 @@ INSERT INTO company.department(name, number) VALUES('SUPPORT', 111);
 INSERT INTO company.department(name, number) VALUES('HUMANS RESOURCE', 222);
 
 --project
-INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 1', 1000, 1);
+INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-30', '2019-08-02', 'PROJETO 1', 1000, 1);
 INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 2', 2000, 2);
 INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 3', 3000, 3);
 INSERT INTO company.project(date_final, date_start, name, value, department_id) VALUES('2019-12-31', '2019-10-01', 'PROJETO 4', 4000, 4);
 
 --employee_project
 INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(1, 1);
-INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(2, 1);
+INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(2, 2);
 INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(3, 2);
 INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(4, 2);
 
 --budget
-INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-09-28', '2019-12-31', '2019-07-01', 1000);
+INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-09-28', '2019-12-31', '2019-07-01', 2000);
 INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-09-29', '2019-12-31', '2019-08-01', 2000);
 -- INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-10-01', '2019-12-30', '2019-09-01', 3000);
 
