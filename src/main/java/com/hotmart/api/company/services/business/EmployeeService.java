@@ -29,8 +29,8 @@ public class EmployeeService {
 
     public List<EmployeeVo> findAll() {
 
-        final List<Employee>  employeeList = employeeRepository.findAll();
-        if (!employeeList.isEmpty()){
+        final List<Employee> employeeList = employeeRepository.findAll();
+        if (!employeeList.isEmpty()) {
             return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
@@ -43,7 +43,7 @@ public class EmployeeService {
         setSupervisorEmployee(employeeForm, employee);
 
         final Employee employeeSaved = employeeRepository.save(employee);
-        if (employeeSaved != null){
+        if (employeeSaved != null) {
             return employeeMapper.toEmployeeVo(employeeSaved);
         }
         throw new GenericErrorException(null, "Ocorreu um erro ao processar a criação deste recurso.");
@@ -69,7 +69,7 @@ public class EmployeeService {
     public void delete(Long id) throws ResourceNotFoundException {
         final Optional<Employee> employeeOptional = employeeRepository.findById(id);
 
-        if (!employeeOptional.isPresent()){
+        if (!employeeOptional.isPresent()) {
             throw new ResourceNotFoundException("id", "Nao existe Employee para este id.");
         }
         employeeRepository.delete(employeeOptional.get());
@@ -79,7 +79,7 @@ public class EmployeeService {
 
         final Optional<Employee> employee = employeeRepository.findById(id);
 
-        if (employee.isPresent()){
+        if (employee.isPresent()) {
             return employeeMapper.toEmployeeVo(employee.get());
         }
         throw new ResourceNotFoundException("id", "Nao existe Employee para este id.");
@@ -87,8 +87,8 @@ public class EmployeeService {
 
     public List<EmployeeVo> findByProjectListDepartmentId(Long idDepartment) {
 
-        final List<Employee>  employeeList = employeeRepository.findByProjectListDepartmentId(idDepartment);
-        if (!employeeList.isEmpty()){
+        final List<Employee> employeeList = employeeRepository.findByProjectListDepartmentId(idDepartment);
+        if (!employeeList.isEmpty()) {
             return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
@@ -98,7 +98,7 @@ public class EmployeeService {
 
         final Optional<Employee> employee = employeeRepository.findByName(name);
 
-        if (employee.isPresent()){
+        if (employee.isPresent()) {
             return employeeMapper.toEmployeeVo(employee.get());
         }
         throw new ResourceNotFoundException("name", "Nao existe Employee para este name.");
@@ -106,18 +106,18 @@ public class EmployeeService {
 
     public List<EmployeeVo> findBySupervisorId(Long idSupervisor) {
 
-        final List<Employee>  employeeList = employeeRepository.findBySupervisorId(idSupervisor);
-        if (!employeeList.isEmpty()){
+        final List<Employee> employeeList = employeeRepository.findBySupervisorId(idSupervisor);
+        if (!employeeList.isEmpty()) {
             return employeeList.stream().map(employeeMapper::toEmployeeVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
     private void setAddressEmployee(EmployeeForm employeeForm, Employee employee) {
-        if (employeeForm.getIdAddress() != null){
+        if (employeeForm.getIdAddress() != null) {
             final Optional<Address> addressEmployee = addressRepository.findById(employeeForm.getIdAddress());
 
-            if (addressEmployee.isPresent()){
+            if (addressEmployee.isPresent()) {
                 employee.setAddress(addressEmployee.get());
             }
         }
@@ -127,7 +127,7 @@ public class EmployeeService {
         if (employeeForm.getIdSupervisor() != null) {
             final Optional<Employee> supervisorEmployee = employeeRepository.findById(employeeForm.getIdSupervisor());
 
-            if (supervisorEmployee.isPresent()){
+            if (supervisorEmployee.isPresent()) {
                 employee.setSupervisor(supervisorEmployee.get());
             }
         }

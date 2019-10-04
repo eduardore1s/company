@@ -26,16 +26,16 @@ public class AddressService {
     public List<AddressVo> findAll() {
 
         final List<Address> addressList = addressRepository.findAll();
-        if (!addressList.isEmpty()){
+        if (!addressList.isEmpty()) {
             return addressList.stream().map(addressMapper::toAddressVo).collect(Collectors.toList());
         }
-       return new ArrayList<>();
+        return new ArrayList<>();
     }
 
     public AddressVo create(AddressForm addressForm) throws GenericErrorException {
         final Address address = addressRepository.save(addressMapper.toAddress(addressForm));
 
-        if (address != null){
+        if (address != null) {
             return addressMapper.toAddressVo(address);
         }
         throw new GenericErrorException(null, "Ocorreu um erro ao processar a criação deste recurso.");
@@ -44,7 +44,7 @@ public class AddressService {
     public AddressVo update(Long id, AddressForm addressForm) throws ResourceNotFoundException {
         final Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if (addressOptional.isPresent()){
+        if (addressOptional.isPresent()) {
             final Address address = addressOptional.get();
             addressMapper.updateAddress(addressForm, address);
             addressRepository.save(address);
@@ -53,20 +53,20 @@ public class AddressService {
         throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
     }
 
-    public void delete(Long id) throws ResourceNotFoundException{
+    public void delete(Long id) throws ResourceNotFoundException {
         final Optional<Address> addressOptional = addressRepository.findById(id);
 
-        if (!addressOptional.isPresent()){
+        if (!addressOptional.isPresent()) {
             throw new ResourceNotFoundException("id", "Nao existe Address para este id.");
         }
         addressRepository.delete(addressOptional.get());
     }
 
-    public AddressVo findById(Long id) throws ResourceNotFoundException{
+    public AddressVo findById(Long id) throws ResourceNotFoundException {
 
         final Optional<Address> address = addressRepository.findById(id);
 
-        if (address.isPresent()){
+        if (address.isPresent()) {
             return addressMapper.toAddressVo(address.get());
         }
         throw new ResourceNotFoundException("id", "Nao existe Address para este id.");

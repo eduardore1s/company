@@ -24,7 +24,7 @@ public class ValidationHandlerError {
 
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public List<ErrorVo> handleMethodArgumentNotValid(MethodArgumentNotValidException exception){
+    public List<ErrorVo> handleMethodArgumentNotValid(MethodArgumentNotValidException exception) {
         final List<ErrorVo> errorsDto = new ArrayList<>();
 
         final List<FieldError> errors = exception.getBindingResult().getFieldErrors();
@@ -41,13 +41,13 @@ public class ValidationHandlerError {
 
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ErrorVo handleResourceNotFoundException(ResourceNotFoundException exception){
+    public ErrorVo handleResourceNotFoundException(ResourceNotFoundException exception) {
         return ErrorVo.builder().field(exception.getField()).message(exception.getMessage()).build();
     }
 
     @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(GenericErrorException.class)
-    public ErrorVo handleGenericErrorException(GenericErrorException exception){
+    public ErrorVo handleGenericErrorException(GenericErrorException exception) {
         return ErrorVo.builder().field(exception.getField()).message(exception.getMessage()).build();
     }
 

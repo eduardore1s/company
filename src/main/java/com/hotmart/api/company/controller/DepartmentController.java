@@ -18,7 +18,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("api/v1/departments")
 public class DepartmentController {
-    
+
     @Autowired
     private DepartmentService departmentService;
 
@@ -26,7 +26,7 @@ public class DepartmentController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public ResponseEntity<?> getDepartments(){
+    public ResponseEntity<?> getDepartments() {
         return ResponseEntity.ok(departmentService.findAll());
     }
 
@@ -57,12 +57,12 @@ public class DepartmentController {
     }
 
     @GetMapping("{id}/employees")
-    public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long id){
+    public ResponseEntity<?> getEmployeesOfDepartment(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.findByProjectListDepartmentId(id));
     }
 
     @GetMapping("{id}/budgets")
-    public ResponseEntity<?> getBudgetStatusOfDepartment(@PathVariable Long id){
+    public ResponseEntity<?> getBudgetStatusOfDepartment(@PathVariable Long id) {
         return ResponseEntity.ok(departmentService.getStatusBudget());
     }
 

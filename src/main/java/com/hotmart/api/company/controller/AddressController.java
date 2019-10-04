@@ -20,7 +20,7 @@ public class AddressController {
     private AddressService addressService;
 
     @GetMapping
-    public ResponseEntity<?> getAddresses(){
+    public ResponseEntity<?> getAddresses() {
         return ResponseEntity.ok(addressService.findAll());
     }
 

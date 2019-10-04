@@ -29,8 +29,8 @@ public class ProjectService {
 
     public List<ProjectVo> findAll() {
 
-        final List<Project>  projectList = projectRepository.findAll();
-        if (!projectList.isEmpty()){
+        final List<Project> projectList = projectRepository.findAll();
+        if (!projectList.isEmpty()) {
             return projectList.stream().map(projectMapper::toProjectVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
@@ -42,7 +42,7 @@ public class ProjectService {
         setDepartmentProject(projectForm, project);
 
         final Project projectSaved = projectRepository.save(project);
-        if (projectSaved != null){
+        if (projectSaved != null) {
             return projectMapper.toProjectVo(projectSaved);
         }
         throw new GenericErrorException(null, "Ocorreu um erro ao processar a criação deste recurso.");
@@ -67,7 +67,7 @@ public class ProjectService {
     public void delete(Long id) throws ResourceNotFoundException {
         final Optional<Project> projectOptional = projectRepository.findById(id);
 
-        if (!projectOptional.isPresent()){
+        if (!projectOptional.isPresent()) {
             throw new ResourceNotFoundException("id", "Nao existe Project para este id.");
         }
         projectRepository.delete(projectOptional.get());
@@ -77,7 +77,7 @@ public class ProjectService {
 
         final Optional<Project> project = projectRepository.findById(id);
 
-        if (project.isPresent()){
+        if (project.isPresent()) {
             return projectMapper.toProjectVo(project.get());
         }
         throw new ResourceNotFoundException("id", "Nao existe Project para este id.");
@@ -86,17 +86,17 @@ public class ProjectService {
     public List<ProjectVo> findByEmployeeListId(Long idEmployee) {
 
         final List<Project> projectList = projectRepository.findByEmployeeListId(idEmployee);
-        if (!projectList.isEmpty()){
+        if (!projectList.isEmpty()) {
             return projectList.stream().map(projectMapper::toProjectVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
     }
 
     private void setDepartmentProject(ProjectForm projectForm, Project project) {
-        if (projectForm.getIdDepartment() != null){
+        if (projectForm.getIdDepartment() != null) {
             final Optional<Department> departmentProject = departmentRepository.findById(projectForm.getIdDepartment());
 
-            if (departmentProject.isPresent()){
+            if (departmentProject.isPresent()) {
                 project.setDepartment(departmentProject.get());
             }
         }

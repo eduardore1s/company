@@ -16,7 +16,7 @@ public class SupervisorController {
     private EmployeeService employeeService;
 
     @GetMapping("/{id}/employees")
-    public ResponseEntity<?> getEmployeesBySupervisor(@PathVariable Long id){
+    public ResponseEntity<?> getEmployeesBySupervisor(@PathVariable Long id) {
         return ResponseEntity.ok(employeeService.findBySupervisorId(id));
     }
 

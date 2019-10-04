@@ -24,7 +24,7 @@ public class EmployeeController {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<?> getEmployees(){
+    public ResponseEntity<?> getEmployees() {
         return ResponseEntity.ok(employeeService.findAll());
     }
 
@@ -49,7 +49,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<EmployeeVo> deleteEmployee(@PathVariable Long id)  {
+    public ResponseEntity<EmployeeVo> deleteEmployee(@PathVariable Long id) {
         employeeService.delete(id);
         return ResponseEntity.noContent().build();
     }
@@ -62,7 +62,7 @@ public class EmployeeController {
 
 
     @GetMapping("/{id}/projects")
-    public ResponseEntity<?> getProjectsByEmployee(@PathVariable Long id){
+    public ResponseEntity<?> getProjectsByEmployee(@PathVariable Long id) {
         return ResponseEntity.ok(projectService.findByEmployeeListId(id));
     }
 }

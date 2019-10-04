@@ -32,8 +32,8 @@ public class Project {
 
     @ManyToMany
     @JoinTable(name = "employee_project",
-            joinColumns = { @JoinColumn(name = "employee_id") },
-            inverseJoinColumns = { @JoinColumn(name = "project_list_id") })
+            joinColumns = {@JoinColumn(name = "employee_id")},
+            inverseJoinColumns = {@JoinColumn(name = "project_list_id")})
     private List<Employee> employeeList;
 
 }

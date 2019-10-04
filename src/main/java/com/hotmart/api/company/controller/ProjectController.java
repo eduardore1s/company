@@ -20,7 +20,7 @@ public class ProjectController {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<?> getProjects(){
+    public ResponseEntity<?> getProjects() {
         return ResponseEntity.ok(projectService.findAll());
     }
 
