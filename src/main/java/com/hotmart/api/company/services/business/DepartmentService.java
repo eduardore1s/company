@@ -26,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -182,42 +183,20 @@ public class DepartmentService {
 
     private BigDecimal calcTotalProjects(Budget budget, List<Project> projects, String typeProject, List<Project> projectsProcessed) {
         projects.removeAll(projectsProcessed);
+        final AtomicReference<BigDecimal> totalProjects = new AtomicReference<BigDecimal>(new BigDecimal(0));
 
-//        final BigDecimal totalProjects = new BigDecimal(0);
-//        projects.forEach(new Consumer<Project>() {
-//            @Override
-//            public void accept(Project project) {
-//                final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
-//                final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
-//
-//                final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
-//                totalProjects.add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
-//                    .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees));
-//            }
-//        });
-
-//        final BigDecimal totalProjects = new BigDecimal(0);
-//        projects.stream().forEach(project -> {
-//            final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
-//            final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
-//
-//            final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
-//            totalProjects.add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
-//                    .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees));
-//        });
-
-        BigDecimal totalProjects = new BigDecimal(0);
-        for (Project project : projects) {
+        projects.forEach(project -> {
             final long daysOfProject = ChronoUnit.DAYS.between(project.getDateStart(), project.getDateFinal());
             final long daysOfProjectAtBudget = calcDaysOfProjectAtBudget(budget, project, typeProject);
-
             final BigDecimal totalSalaryEmployees = calcTotalSalaryEmployees(project.getEmployeeList(), new BigDecimal(daysOfProjectAtBudget));
-            totalProjects = totalProjects.add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
-                    .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees));
-        }
+
+            totalProjects.set(
+                    totalProjects.get().add(project.getValue().divide(new BigDecimal(daysOfProject), RoundingMode.HALF_UP)
+                            .multiply(new BigDecimal(daysOfProjectAtBudget)).add(totalSalaryEmployees)));
+        });
 
         projectsProcessed.addAll(projects);
-        return totalProjects;
+        return totalProjects.get();
     }
 
     private long calcDaysOfProjectAtBudget(Budget budget, Project project, String typeProject) {
@@ -237,23 +216,11 @@ public class DepartmentService {
     }
 
     private BigDecimal calcTotalSalaryEmployees(List<Employee> employees, BigDecimal daysOfProjectAtBudget) {
-//        final BigDecimal totalSalaryEmployees = new BigDecimal(0);
 
-//        employees.forEach(employee -> totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget)));
-//
-//        employees.forEach(new Consumer<Employee>() {
-//            @Override
-//            public void accept(Employee employee) {
-//                totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget)));
-//            }
-//        });
+        final AtomicReference<BigDecimal> totalSalaryEmployees = new AtomicReference<>(new BigDecimal(0));
+        employees.forEach(employee -> totalSalaryEmployees.set(
+                totalSalaryEmployees.get().add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget))));
 
-        BigDecimal totalSalaryEmployees = new BigDecimal(0);
-        for (Employee employee : employees) {
-            totalSalaryEmployees =
-                    totalSalaryEmployees.add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget));
-        }
-
-        return totalSalaryEmployees;
+        return totalSalaryEmployees.get();
     }
 }
