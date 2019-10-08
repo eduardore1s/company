@@ -5,15 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class DepartmentForm {
+public class ProjectEmployeesForm {
 
     @NotNull
-    private String name;
-
-    @NotNull
-    private Integer number;
+    private List<Long> idsEmployees;
 }

@@ -24,7 +24,10 @@ public class EmployeeController {
     private ProjectService projectService;
 
     @GetMapping
-    public ResponseEntity<?> getEmployees() {
+    public ResponseEntity<?> getEmployees(@RequestParam(required = false) String name) {
+        if (name != null){
+            return ResponseEntity.ok(employeeService.findByName(name));
+        }
         return ResponseEntity.ok(employeeService.findAll());
     }
 
@@ -53,13 +56,6 @@ public class EmployeeController {
         employeeService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-
-    @GetMapping("/search")
-    public ResponseEntity<?> getEmployeeByName(@RequestParam String name) {
-        return ResponseEntity.ok(employeeService.findByName(name));
-    }
-
 
     @GetMapping("/{id}/projects")
     public ResponseEntity<?> getProjectsByEmployee(@PathVariable Long id) {

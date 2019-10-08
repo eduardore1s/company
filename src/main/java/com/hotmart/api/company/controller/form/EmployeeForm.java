@@ -33,5 +33,4 @@ public class EmployeeForm {
     @NotNull
     private BigDecimal salary;
 
-//    private List<Long> idProjects; TODO
 }

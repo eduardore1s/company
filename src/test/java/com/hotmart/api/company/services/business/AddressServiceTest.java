@@ -16,6 +16,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,33 +43,37 @@ public class AddressServiceTest {
 
     @Test
     public void findAllShouldReturnListAddressDtoResponseWith3Elements(){
+
         final List<Address> addressList = new ArrayList<>();
         addressList.add(AddressDataFactory.buildAddress(1L));
         addressList.add(AddressDataFactory.buildAddress(2L));
         addressList.add(AddressDataFactory.buildAddress(3L));
-        Mockito.when(addressRepository.findAll()).thenReturn(addressList);
 
-        final List<AddressVo> addressListDtoResponse = addressService.findAll();
+        Page<Address> addresses = new PageImpl<>(addressList);
+        Mockito.when(addressRepository.findAll(Mockito.any(Pageable.class))).thenReturn(addresses);
 
-        Assert.assertTrue(addressListDtoResponse.size() == 3);
-        Assert.assertEquals(addressList.get(0).getStreet(), addressListDtoResponse.get(0).getStreet());
-        Assert.assertEquals(addressList.get(0).getCity(), addressListDtoResponse.get(0).getCity());
-        Assert.assertEquals(addressList.get(0).getCountry(), addressListDtoResponse.get(0).getCountry());
-        Assert.assertEquals(addressList.get(0).getState(), addressListDtoResponse.get(0).getState());
-        Assert.assertEquals(addressList.get(0).getZipCode(), addressListDtoResponse.get(0).getZipCode());
+        final Pageable pageable = PageRequest.of(0, 10);
+        final Page<AddressVo> addressPageDtoResponse = addressService.findAll(pageable);
 
-        Assert.assertEquals(addressList.get(1).getStreet(), addressListDtoResponse.get(1).getStreet());
-        Assert.assertEquals(addressList.get(2).getStreet(), addressListDtoResponse.get(2).getStreet());
+        Assert.assertTrue(addressPageDtoResponse.getTotalElements () == 3);
+        Assert.assertEquals(addressList.get(0).getStreet(), addressPageDtoResponse.getContent().get(0).getStreet());
+        Assert.assertEquals(addressList.get(0).getCity(), addressPageDtoResponse.getContent().get(0).getCity());
+        Assert.assertEquals(addressList.get(0).getCountry(), addressPageDtoResponse.getContent().get(0).getCountry());
+        Assert.assertEquals(addressList.get(0).getState(), addressPageDtoResponse.getContent().get(0).getState());
+        Assert.assertEquals(addressList.get(0).getZipCode(), addressPageDtoResponse.getContent().get(0).getZipCode());
+
+        Assert.assertEquals(addressList.get(1).getStreet(), addressPageDtoResponse.getContent().get(1).getStreet());
+        Assert.assertEquals(addressList.get(2).getStreet(), addressPageDtoResponse.getContent().get(2).getStreet());
     }
 
     @Test
     public void findAllShouldReturnListEmpty(){
-        Mockito.when(addressRepository.findAll()).thenReturn(new ArrayList<>());
+        Mockito.when(addressRepository.findAll(Mockito.any(Pageable.class))).thenReturn(new PageImpl<>(new ArrayList<>()));
 
-        final List<AddressVo> addressListDtoResponse = addressService.findAll();
+        final Page<AddressVo> addressPageDtoResponse = addressService.findAll(PageRequest.of(0, 10));
 
-        Assert.assertNotNull(addressListDtoResponse);
-        Assert.assertTrue(addressListDtoResponse.isEmpty());
+        Assert.assertNotNull(addressPageDtoResponse);
+        Assert.assertTrue(addressPageDtoResponse.getContent().isEmpty());
     }
 
     @Test

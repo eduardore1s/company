@@ -8,12 +8,11 @@ import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.AddressMapper;
 import com.hotmart.api.company.repository.AddressRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,13 +22,9 @@ public class AddressService {
 
     private final AddressRepository addressRepository;
 
-    public List<AddressVo> findAll() {
-
-        final List<Address> addressList = addressRepository.findAll();
-        if (!addressList.isEmpty()) {
-            return addressList.stream().map(addressMapper::toAddressVo).collect(Collectors.toList());
-        }
-        return new ArrayList<>();
+    public Page<AddressVo> findAll(Pageable pageable) {
+        final Page<Address> addressPage = addressRepository.findAll(pageable);
+        return addressPage.map(addressMapper::toAddressVo);
     }
 
     public AddressVo create(AddressForm addressForm) throws GenericErrorException {

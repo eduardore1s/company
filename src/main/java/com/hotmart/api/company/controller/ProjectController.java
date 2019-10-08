@@ -1,6 +1,8 @@
 package com.hotmart.api.company.controller;
 
+import com.hotmart.api.company.controller.form.ProjectEmployeesForm;
 import com.hotmart.api.company.controller.form.ProjectForm;
+import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.services.business.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -50,5 +53,11 @@ public class ProjectController {
     public ResponseEntity<ProjectVo> deleteProject(@PathVariable Long id) {
         projectService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("{id}/employees")
+    public ResponseEntity<List<EmployeeVo>> postProjectEmployees (@PathVariable Long id, @Valid @RequestBody ProjectEmployeesForm projectEmployessForm) {
+        final List<EmployeeVo> projectEmployees = projectService.setProjectEmployees(id, projectEmployessForm);
+        return new ResponseEntity<>(projectEmployees, HttpStatus.CREATED);
     }
 }

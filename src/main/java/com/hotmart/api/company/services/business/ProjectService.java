@@ -1,6 +1,8 @@
 package com.hotmart.api.company.services.business;
 
+import com.hotmart.api.company.controller.form.ProjectEmployeesForm;
 import com.hotmart.api.company.controller.form.ProjectForm;
+import com.hotmart.api.company.controller.vo.EmployeeVo;
 import com.hotmart.api.company.controller.vo.ProjectVo;
 import com.hotmart.api.company.model.entity.Department;
 import com.hotmart.api.company.model.entity.Project;
@@ -8,6 +10,7 @@ import com.hotmart.api.company.model.exception.GenericErrorException;
 import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
 import com.hotmart.api.company.repository.DepartmentRepository;
+import com.hotmart.api.company.repository.EmployeeRepository;
 import com.hotmart.api.company.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,8 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
 
     private final DepartmentRepository departmentRepository;
+
+    private final EmployeeRepository employeeRepository;
 
     public List<ProjectVo> findAll() {
 
@@ -90,6 +95,26 @@ public class ProjectService {
             return projectList.stream().map(projectMapper::toProjectVo).collect(Collectors.toList());
         }
         return new ArrayList<>();
+    }
+
+    public List<EmployeeVo> setProjectEmployees(Long id, ProjectEmployeesForm projectEmployeesForm) throws ResourceNotFoundException {
+
+//        final Optional<Project> projectOptional = projectRepository.findById(id);
+//
+//        if (projectOptional.isPresent()) {
+//
+//            final Project project = projectOptional.get();
+//            projectEmployeesForm.getIdsEmployees().stream().map(idEmployee -> employeeRepository.findById(idEmployee))
+//
+//
+//            project.getEmployeeList().stream().map(employee -> employeeRepository.findById(employee.getId()).orElse(null)).collect(Collectors.toList());
+//
+//
+//            project.getEmployeeList().stream().map(employee -> employeeRepository.findById(employee.getId()).orElse(null)).collect(Collectors.toList());
+//
+//            return projectMapper.toProjectVo(projectRepository.save(project));
+//        }
+        throw new ResourceNotFoundException("id", "Nao existe Project para este id.");
     }
 
     private void setDepartmentProject(ProjectForm projectForm, Project project) {

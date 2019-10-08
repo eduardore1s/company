@@ -10,6 +10,7 @@ import com.hotmart.api.company.model.exception.ResourceNotFoundException;
 import com.hotmart.api.company.model.mapper.ProjectMapper;
 import com.hotmart.api.company.model.mapper.ProjectMapperImpl;
 import com.hotmart.api.company.repository.DepartmentRepository;
+import com.hotmart.api.company.repository.EmployeeRepository;
 import com.hotmart.api.company.repository.ProjectRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -36,10 +37,13 @@ public class ProjectServiceTest {
     @Mock
     private DepartmentRepository departmentRepository;
 
+    @Mock
+    private EmployeeRepository employeeRepository;
+
     @Before
     public void init(){
         projectMapper = new ProjectMapperImpl();
-        projectServiceImpl = new ProjectService(projectMapper, projectRepository, departmentRepository);
+        projectServiceImpl = new ProjectService(projectMapper, projectRepository, departmentRepository, employeeRepository);
     }
 
     @Test

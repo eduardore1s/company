@@ -124,7 +124,9 @@ public class DepartmentService {
 
     public StatusBudgetVo getStatusBudget(Long idDepartment) {
 
-        final Budget currentBudget = budgetRepository.findFirstByOrderByCreatedDateDesc();
+        final Optional<Department> departmentOptional = departmentRepository.findById(idDepartment);
+
+        final Budget currentBudget = departmentOptional.get().getBudgets().stream().reduce((budget, budget2) -> budget2).get() ; //TODO refactor null pointer
 
         final List<Project> projectsProcessed = new ArrayList<>();
 

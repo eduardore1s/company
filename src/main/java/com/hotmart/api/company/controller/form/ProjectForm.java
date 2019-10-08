@@ -28,5 +28,4 @@ public class ProjectForm {
     @NotNull
     private LocalDate dateFinal;
 
-//    private List<Long> idEmployees;
 }

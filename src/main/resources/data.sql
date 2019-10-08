@@ -30,7 +30,8 @@ INSERT INTO company.employee_project(employee_id, project_list_id) VALUES(4, 2);
 
 --budget
 INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-09-28', '2019-12-31', '2019-07-01', 2000);
-INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-09-29', '2019-12-31', '2019-08-01', 2000);
--- INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('2019-10-01', '2019-12-30', '2019-09-01', 3000);
+
+--department_budgets
+INSERT INTO company.department_budgets(department_id, budgets_id) VALUES(1, 1);
 
 
