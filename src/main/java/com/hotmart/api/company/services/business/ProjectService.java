@@ -104,7 +104,7 @@ public class ProjectService {
 //        if (projectOptional.isPresent()) {
 //
 //            final Project project = projectOptional.get();
-//            projectEmployeesForm.getIdsEmployees().stream().map(idEmployee -> employeeRepository.findById(idEmployee))
+//            List<Employee> collect = projectEmployeesForm.getIdsEmployees().stream().map(idEmployee -> employeeRepository.findById(idEmployee).get()).collect(Collectors.toList());
 //
 //
 //            project.getEmployeeList().stream().map(employee -> employeeRepository.findById(employee.getId()).orElse(null)).collect(Collectors.toList());

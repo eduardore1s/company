@@ -126,7 +126,13 @@ public class DepartmentService {
 
         final Optional<Department> departmentOptional = departmentRepository.findById(idDepartment);
 
-        final Budget currentBudget = departmentOptional.get().getBudgets().stream().reduce((budget, budget2) -> budget2).get() ; //TODO refactor null pointer
+        final Budget currentBudget = departmentOptional.get().getBudgets().stream()
+                .reduce((budget, budget2) -> {
+                    if (budget.getCreatedDate().compareTo(budget2.getCreatedDate()) > 0)
+                        return budget;
+                    else
+                        return budget2;
+                }).get(); //TODO refactor null pointer
 
         final List<Project> projectsProcessed = new ArrayList<>();
 
@@ -219,10 +225,9 @@ public class DepartmentService {
 
     private BigDecimal calcTotalSalaryEmployees(List<Employee> employees, BigDecimal daysOfProjectAtBudget) {
 
-        final AtomicReference<BigDecimal> totalSalaryEmployees = new AtomicReference<>(new BigDecimal(0));
-        employees.forEach(employee -> totalSalaryEmployees.set(
-                totalSalaryEmployees.get().add(employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP).multiply(daysOfProjectAtBudget))));
-
-        return totalSalaryEmployees.get();
+        return employees.stream().map(employee ->
+                employee.getSalary().divide(DAYS_OF_MONTH, RoundingMode.HALF_UP)
+                        .multiply(daysOfProjectAtBudget))
+                .reduce((bd1, bd2) -> bd2).get();
     }
 }
