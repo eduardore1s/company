@@ -35,3 +35,7 @@ INSERT INTO company.budget(created_date, date_final, date_start, value) VALUES('
 INSERT INTO company.department_budgets(department_id, budgets_id) VALUES(1, 1);
 
 
+-- user
+INSERT INTO company.`user`(email, name, password) VALUES('eduardo.reis@hotmart.com', 'Eduardo Admin', '$2a$10$CCFnVTywXA2gKuH4Di5Ofe3mxtIuCq28tLI6ZEWQCx1p/yfCLxUoC');
+
+
