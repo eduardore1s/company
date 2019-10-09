@@ -29,8 +29,8 @@ public class AuthenticationController {
     @PostMapping
     public ResponseEntity<TokenVo> authenticate(@RequestBody @Valid LoginForm loginForm){
         try{
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getEmail(), loginForm.getPassword()));
-            String token = tokenService.generateToken(authentication);
+            final Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginForm.getEmail(), loginForm.getPassword()));
+            final String token = tokenService.generateToken(authentication);
 
             return ResponseEntity.ok(new TokenVo(token, "Bearer"));
         } catch (AuthenticationException e) {
